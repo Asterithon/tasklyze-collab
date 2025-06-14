@@ -1,3 +1,7 @@
+<?php
+  include ("inc/connec.php");
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -216,24 +220,19 @@
               </p>
             </a>
             <ul class="nav nav-treeview">
-              <li class="nav-item">
-                <a href="./index.html" class="nav-link active">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Dashboard v1</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="./index2.html" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Dashboard v2</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="./index3.html" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Dashboard v3</p>
-                </a>
-              </li>
+              <?php
+                $sql = "SELECT * FROM project";
+                $res = mysqli_query($conn, $sql);
+
+                while ($data = mysqli_fetch_array($res)){?>
+                  <li class="nav-item">
+                    <a href="kanban.php?id=<?php echo $data['id_project']; ?>" class="nav-link">
+                      <i class="far fa-circle nav-icon"></i>
+                      <p><?php echo $data['name_project']; ?></p>
+                    </a>
+                  </li>
+              <?php  }
+              ?>
             </ul>
 
           </li>
