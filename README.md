@@ -33,7 +33,7 @@ Melalui proyek ini, kami tidak hanya mengejar hasil akhir, tetapi juga semangat 
 
 🛡️ Untuk sementara, kontribusi **terbatas hanya pada maintainer utama**.
 
-**Maintainer:** `@ngurahp` _(dummy sementara)_
+**Maintainer:** `@ngurahp` 
 
 Jika kamu ingin menyarankan perubahan, silakan buat _issue_ atau sampaikan via Wangsaff tim.
 
