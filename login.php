@@ -21,21 +21,24 @@
                         <label for="inputusername"><i class="fa-solid fa-user fa-xs mx-2"></i>Username</label>
                     </div>
                 <div class="form-floating mb-3">
-                    <input class="form-control" id="inputPassword" type="password" name="password" placeholder="Password"
-                    required />
+                    <input class="form-control" id="inputPassword" type="password" name="password" placeholder="Password" required />
                     <label for="inputPassword"><i class="fa-solid fa-lock fa-xs mx-2"></i>Password</label>
                 </div>
             
             </div>
-
-        <div class=" px-3 py-3">
-            <button type="submit" class="btn btn-primary container-fluid mb-2">Login Now</button>
-            <button type="button" class="btn btn-dark container-fluid mt-2" data-bs-toggle="modal"
-            data-bs-target="#register">
-            Register
-        </button></form>
-    </div>
+            <div class=" px-3 py-3">
+                <button type="submit" class="btn btn-primary container-fluid mb-2">Login Now</button>
+                <button type="button" class="btn btn-dark container-fluid mt-2" data-bs-toggle="modal"
+                data-bs-target="#register">
+                Register
+                </button>
+            </div>
+            </form>
         </div>
     </div>
     <!-- /Modal login -->
 </div>
+
+<?php
+    include ("register.php");
+?>
