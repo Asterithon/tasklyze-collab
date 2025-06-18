@@ -54,7 +54,7 @@
     <div class="max-w-4xl mx-auto text-center">
       <h2 class="text-4xl font-bold mb-4">Kelola Proyekmu Tanpa Ribet</h2>
       <p class="text-lg mb-6 text-gray-700">Dashboard ringan, cepat, dan fokus pada produktivitas.</p>
-      <a href="index.php" class="mt-8 inline-block bg-blue-600 text-white px-6 py-3 rounded-xl hover:bg-blue-700 transition">Masuk Dashboard</a>
+      <a href="register.php" class="mt-8 inline-block bg-blue-600 text-white px-6 py-3 rounded-xl hover:bg-blue-700 transition">Masuk Dashboard</a>
     </div>
   </section>
 
