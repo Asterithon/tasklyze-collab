@@ -273,19 +273,20 @@ include("inc/connec.php");
               </h3>
             </div>
             <div class="card-body">
-              <div class="card card-primary card-outline">
+              <?php include ("style/template/task_list.php"); ?>
+            </div>
+              <button type="button" class="card card-primary card-outline" data-bs-toggle="modal" data-bs-target="#newTask">
                 <div class="card-header">
-                  <h5 class="card-title">Create first milestone</h5>
+                  <h5 class="card-title">Create new task</h5>
                   <div class="card-tools">
-                    <a href="#" class="btn btn-tool btn-link">#5</a>
                     <a href="#" class="btn btn-tool">
                       <i class="fas fa-pen"></i>
                     </a>
                   </div>
                 </div>
-              </div>
-            </div>
+              </button>
           </div>
+
           <div class="card card-row card-default">
             <div class="card-header bg-info">
               <h3 class="card-title">

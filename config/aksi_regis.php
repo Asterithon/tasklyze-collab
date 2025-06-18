@@ -2,7 +2,7 @@
     include ("../inc/connec.php");
     $username = $_POST["username"];
     $email = $_POST["email"];
-    $pass = $_POST["password"];
+    $pass = md5($_POST["password"]);
 
     $sql = "INSERT INTO user (username, email, password) VALUES ('$username', '$email', '$pass')";
     $result = mysqli_query($conn, $sql);
