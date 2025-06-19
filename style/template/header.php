@@ -142,7 +142,7 @@
   <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
 
-    <a href="index3.html" class="brand-link">
+    <a href="index.php" class="brand-link">
       <span class="brand-text font-weight-bold text-center">Tasklyze</span>
     </a>
 
@@ -188,7 +188,7 @@
 
               while ($data = mysqli_fetch_array($res)) { ?>
                 <li class="nav-item">
-                  <a href="kanban.php?id=<?php echo $data['id_project']; ?>" class="nav-link">
+                  <a href="?id=<?php echo $data['id_project']; ?>" class="nav-link">
                     
                     <i class="far fa-circle nav-icon"></i>
                     <p><?php echo $data['name_project']; ?></p>

@@ -1,5 +1,6 @@
 <?php
 include("inc/connec.php");
+$id = isset($_GET['id']) && is_numeric($_GET['id']) ? (int) $_GET['id'] : null;
 ?>
 
 <!DOCTYPE html>
@@ -54,7 +55,19 @@ include("inc/connec.php");
         <div class="container-fluid">
           <div class="row">
             <div class="col-sm-6">
-              <h1>Kanban Board</h1>
+              <h1>
+              <?php
+              if(isset($id)){
+                $q_project = "SELECT * FROM project WHERE id_project = $id";
+                $res_project = mysqli_query($conn, $q_project);
+                if($res_project){
+                  $d_project = mysqli_fetch_array($res_project);
+                  echo $d_project['name_project'];
+                }
+            }else{
+              echo "Kanban Board";
+            }
+              ?></h1>
             </div>
             <div class="col-sm-6 d-none d-sm-block">
               <ol class="breadcrumb float-sm-right">
@@ -274,17 +287,18 @@ include("inc/connec.php");
             </div>
             <div class="card-body">
               <?php include ("style/template/task_list.php"); ?>
-            </div>
-              <button type="button" class="card card-primary card-outline" data-bs-toggle="modal" data-bs-target="#newTask">
+              <div class="card card-primary card-outline" data-bs-toggle="modal" data-bs-target="#newTask">
                 <div class="card-header">
                   <h5 class="card-title">Create new task</h5>
                   <div class="card-tools">
-                    <a href="#" class="btn btn-tool">
+                    <button type="button" class="btn btn-tool" data-bs-toggle="modal" data-bs-target="#newTask">
                       <i class="fas fa-pen"></i>
-                    </a>
+                    </button>
                   </div>
                 </div>
-              </button>
+              </div>
+            </div>
+            <?php include ("style/template/new_task.php"); ?>
           </div>
 
           <div class="card card-row card-default">
