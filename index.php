@@ -1,5 +1,6 @@
 <?php
 include("inc/connec.php");
+session_start();
 ?>
 
 <!DOCTYPE html>
@@ -62,7 +63,15 @@ include("inc/connec.php");
                 <li class="breadcrumb-item active">Kanban Board</li>
                 <!-- modal -->
                 <?php
-                // include 'login.php';
+                    if (isset($_SESSION['level'])) {
+                      echo '<a class="btn btn-danger" href="logout.php">Keluar</a>';
+                      if ($_SESSION['level'] == "user") {
+                        echo '<a class="btn btn-primary" href="kanban.php?id=' . $_GET['id'] . '">Back to Project</a>';}
+                      
+                    } else {
+                      include("login.php");
+                    }
+
                 ?>
                 <!-- /Modal -->
               </ol>
