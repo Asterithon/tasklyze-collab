@@ -1,6 +1,7 @@
 <?php
 include("inc/connec.php");
 $id = isset($_GET['id']) && is_numeric($_GET['id']) ? (int) $_GET['id'] : null;
+session_start();
 ?>
 
 <!DOCTYPE html>
@@ -75,7 +76,15 @@ $id = isset($_GET['id']) && is_numeric($_GET['id']) ? (int) $_GET['id'] : null;
                 <li class="breadcrumb-item active">Kanban Board</li>
                 <!-- modal -->
                 <?php
-                // include 'login.php';
+                    if (isset($_SESSION['level'])) {
+                      echo '<a class="btn btn-danger" href="logout.php">Keluar</a>';
+                      if ($_SESSION['level'] == "user") {
+                        echo '<a class="btn btn-primary" href="kanban.php?id=' . $_GET['id'] . '">Back to Project</a>';}
+                      
+                    } else {
+                      include("login.php");
+                    }
+
                 ?>
                 <!-- /Modal -->
               </ol>

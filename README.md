@@ -60,6 +60,9 @@ Kami percaya bahwa **proyek bagus lahir dari tim yang solid**. Tasklyze bukan ha
 - Gusti Agung Putu Bintang Andika Putra / 2401010507
 - Ngurah Putra Amerta Widhi Gunaya / 2401010508
 - Dillon Christiano / 2401010536
+
 (tolong jangan berpikir project ini dibuat dengan bantuan ai, trimakasi)
+
+---
 
 Lisensi & Hak Cipta mengikuti mood masing-masing.

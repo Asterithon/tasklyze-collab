@@ -1,5 +1,5 @@
 <?php
-    include ("../inc/connec.php");
+    include '../inc/connec.php';
     $username = $_POST["username"];
     $email = $_POST["email"];
     $pass = md5($_POST["password"]);

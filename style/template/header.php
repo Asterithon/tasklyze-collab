@@ -153,7 +153,7 @@
         <div class="image">
         </div>
         <div class="info">
-          <a href="#" class="d-block">Alexander Pierce</a>
+          <a href="#" class="d-block">Wellcome, <?php echo $_SESSION['username']; ?>!</a>
         </div>
       </div>
 
@@ -182,20 +182,28 @@
               </p>
             </a>
             <ul class="nav nav-treeview">
-              <?php
-              $sql = "SELECT * FROM project";
-              $res = mysqli_query($conn, $sql);
 
-              while ($data = mysqli_fetch_array($res)) { ?>
-                <li class="nav-item">
-                  <a href="?id=<?php echo $data['id_project']; ?>" class="nav-link">
-                    
-                    <i class="far fa-circle nav-icon"></i>
-                    <p><?php echo $data['name_project']; ?></p>
-                  </a>
-                </li>
-              <?php  }
-              ?>
+ <?php
+$sql = "SELECT * FROM r_user_project 
+        LEFT JOIN user ON r_user_project.id_user = user.id_user 
+        LEFT JOIN project ON r_user_project.id_project = project.id_project 
+        WHERE user.id_user = '" . $_SESSION['id_user'] . "'";
+$res = mysqli_query($conn, $sql);
+
+// Cek apakah ada data yang ditemukan
+if (mysqli_num_rows($res) > 0) {
+    while ($data = mysqli_fetch_array($res)) { ?>
+        <li class="nav-item">
+            <a href="kanban.php?id=<?php echo $data['id_project']; ?>" class="nav-link">
+                <i class="far fa-circle nav-icon"></i>
+                <p><?php echo $data['name_project']; ?></p>
+            </a>
+        </li>
+    <?php }
+} else {
+    echo '<p class="text-center text-warning fw-bold">You don\'t have any project yet!</p>';
+}
+?>
             </ul>
 
           </li>
