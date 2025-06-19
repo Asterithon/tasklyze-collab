@@ -2,9 +2,10 @@
     include ("../inc/connec.php");
     $title = $_POST["taskTitle"];
     $description = $_POST["taskDescription"];
+    $time = date("Y-m-d");
     $id_project = 1;
 
-    $sql = "INSERT INTO task (name_task, desc_task, status_task, id_project) VALUES ('$title', '$description', 'progress', '$id_project')";
+    $sql = "INSERT INTO task (name_task, desc_task, status_task, id_project, start_task) VALUES ('$title', '$description', 'progress', '$id_project', '$time')";
     $result = mysqli_query($conn, $sql);
 
     if ($result) {

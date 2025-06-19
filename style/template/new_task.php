@@ -1,4 +1,5 @@
-<div class="modal fade" id="newTask" tabindex="-1" aria-labelledby="newTaskModalLabel" aria-hidden="true">
+<div class="modal fade" id="newTask" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
     <form id="taskForm" class="modal-content" action="config/aksi_new_task.php" method="post" novalidate>
       <div class="modal-header">
