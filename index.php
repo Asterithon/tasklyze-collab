@@ -1,5 +1,6 @@
 <?php
 include("inc/connec.php");
+$id = isset($_GET['id']) && is_numeric($_GET['id']) ? (int) $_GET['id'] : null;
 session_start();
 ?>
 
@@ -68,6 +69,7 @@ session_start();
         }
       } else {
         include 'landing_page.php';}
+
       
     ?>
     <!-- /.content-wrapper -->

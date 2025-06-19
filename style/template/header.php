@@ -142,7 +142,7 @@
   <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
 
-    <a href="index3.html" class="brand-link">
+    <a href="index.php" class="brand-link">
       <span class="brand-text font-weight-bold text-center">Tasklyze</span>
     </a>
 
@@ -183,6 +183,7 @@
               </p>
             </a>
             <ul class="nav nav-treeview">
+
               <li class="nav-item">
                 <a href="pages/mailbox/compose.html" class="nav-link">
                   <i class="far fa-plus nav-icon"></i>
@@ -191,6 +192,7 @@
               </li>
               <?php
               $sql = "SELECT * FROM r_user_project 
+
         LEFT JOIN user ON r_user_project.id_user = user.id_user 
         LEFT JOIN project ON r_user_project.id_project = project.id_project 
         WHERE user.id_user = '" . $_SESSION['id_user'] . "'";
