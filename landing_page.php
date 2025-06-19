@@ -9,7 +9,7 @@
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- <link href="css/styles.css" rel="stylesheet" /> -->
-     <!-- sementara cdn dulu -->
+    <!-- sementara cdn dulu -->
     <!-- Font Awesome 6.7.2 via CDNJS -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-..." crossorigin="anonymous" referrerpolicy="no-referrer" />
     <!-- Google Font: Source Sans Pro -->
@@ -44,6 +44,9 @@
           <li><a href="#features" class="hover:text-blue-500">Fitur</a></li>
           <li><a href="#demo" class="hover:text-blue-500">Demo</a></li>
           <li><a href="#about" class="hover:text-blue-500">Tentang</a></li>
+          <li>
+            <?php include 'login.php';?>
+          </li>
         </ul>
       </nav>
     </div>
