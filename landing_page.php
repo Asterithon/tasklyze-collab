@@ -40,7 +40,7 @@
     <div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
       <h1 class="text-xl font-bold text-blue-600">Tasklyze</h1>
       <nav>
-        <ul class="flex space-x-6 text-sm font-medium">
+        <ul class="flex space-x-6 text-sm mb-0 items-center font-medium">
           <li><a href="#features" class="hover:text-blue-500">Fitur</a></li>
           <li><a href="#demo" class="hover:text-blue-500">Demo</a></li>
           <li><a href="#about" class="hover:text-blue-500">Tentang</a></li>
@@ -57,7 +57,7 @@
     <div class="max-w-4xl mx-auto text-center">
       <h2 class="text-4xl font-bold mb-4">Kelola Proyekmu Tanpa Ribet</h2>
       <p class="text-lg mb-6 text-gray-700">Dashboard ringan, cepat, dan fokus pada produktivitas.</p>
-      <a href="register.php" class="mt-8 inline-block bg-blue-600 text-white px-6 py-3 rounded-xl hover:bg-blue-700 transition">Masuk Dashboard</a>
+      <button href="register.php" data-bs-toggle="modal" data-bs-target="#login" class="mt-8 inline-block bg-blue-600 text-white px-6 py-3 rounded-xl hover:bg-blue-700 transition">Masuk Dashboard</button>
     </div>
   </section>
 
