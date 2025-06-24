@@ -3,7 +3,7 @@
     $title = $_POST["taskTitle"];
     $description = $_POST["taskDescription"];
     $time = date("Y-m-d");
-    $id_project = 1;
+    $id_project = $_GET['id'];
 
     $sql = "INSERT INTO task (name_task, desc_task, status_task, id_project, start_task) VALUES ('$title', '$description', 'progress', '$id_project', '$time')";
     $result = mysqli_query($conn, $sql);
@@ -13,6 +13,6 @@
         window.location = '../';</script>";
     } else {
     echo "<script>alert('Task Failed to create');
-        window.location = '../';</script>";
+        window.location = '../?page=project&&id=$id_project';</script>";
     }
 ?>
