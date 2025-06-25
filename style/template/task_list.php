@@ -1,6 +1,6 @@
   <?php
     include ("inc/connec.php");
-    $sql = "SELECT * FROM task";
+    $sql = "SELECT * FROM task where id_project = '" . $_GET['id'] . "'";
     $res = mysqli_query($conn, $sql);
 
     while ($data = mysqli_fetch_array($res)) { ?>
@@ -13,6 +13,7 @@
         </div>
         <div class="card-body">
           <p><?php echo $data['desc_task'];?></p>
+          <p class="text-secondary"><?php echo $data['created_at'];?></p>
         </div>
     </div>
   <?php } ?>
