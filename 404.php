@@ -22,7 +22,7 @@
     <h1 class="text-7xl font-extrabold text-blue-600 mb-4">404</h1>
     <h2 class="text-2xl font-semibold mb-2 text-gray-800">Halaman Tidak Ditemukan</h2>
     <p class="text-gray-600 mb-6 max-w-md">Maaf, halaman yang kamu cari tidak tersedia atau sudah dipindahkan. Silakan kembali ke beranda atau hubungi administrator jika masalah berlanjut.</p>
-    <a href="/" class="inline-block px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">Kembali ke Beranda</a>
+    <a href="javascript:history.back()" class="inline-block px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">Kembali ke Halaman Sebelumnya</a>
   </section>
 </body>
 
