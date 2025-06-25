@@ -11,6 +11,16 @@
     <li class="nav-item d-none d-sm-inline-block">
       <a href="#" class="nav-link">Contact</a>
     </li>
+                            <!-- modal -->
+                        <?php
+                        if (isset($_SESSION['level'])) {
+                            echo '<a class="btn btn-danger" href="logout.php">Keluar</a>';
+                        } else {
+                            include("login.php");
+                        }
+
+                        ?>
+                        <!-- /Modal -->
   </ul>
 
   <!-- Right navbar links -->
@@ -206,7 +216,7 @@
             }
             ?>
             <li class="nav-item">
-              <a class="nav-link">
+              <a class="nav-link" href="?page=new_project">
                 <i class="far fa-plus nav-icon"></i>
                 <p>Create New Project</p>
               </a>

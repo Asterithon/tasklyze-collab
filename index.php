@@ -60,6 +60,9 @@ session_start();
             case 'project';
               include 'project.php';
               break;
+            case 'new_project';
+              include 'style/template/new_project.php';
+              break;
             default:
               include '404.php';
               break;
