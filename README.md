@@ -26,7 +26,7 @@ Melalui proyek ini, kami tidak hanya mengejar hasil akhir, tetapi juga semangat 
 
 - `main` – Base utama proyek
 - `cabang1` – Asterithon(Bintang Andika)
-- `keju` – Dilon
+- `keju` – DylonKejhu
 - `ngurahp` – Ngurah P****
 
 ## 🤝 Aturan Kontribusi
