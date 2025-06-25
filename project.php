@@ -9,16 +9,6 @@
                     <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item"><a href="#">Home</a></li>
                         <li class="breadcrumb-item active">Kanban Board</li>
-                        <!-- modal -->
-                        <?php
-                        if (isset($_SESSION['level'])) {
-                            echo '<a class="btn btn-danger" href="logout.php">Keluar</a>';
-                        } else {
-                            include("login.php");
-                        }
-
-                        ?>
-                        <!-- /Modal -->
                     </ol>
                 </div>
             </div>
