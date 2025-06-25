@@ -114,36 +114,60 @@
               <div class="table-responsive mailbox-messages">
                 <table class="table table-hover table-striped">
                   <tbody>
-                  <tr>
-                    <td>
-                      <div class="icheck-primary">
-                        <input type="checkbox" value="" id="check1">
-                        <label for="check1"></label>
-                      </div>
-                    </td>
-                    <td class="mailbox-star"><a href="#"><i class="fas fa-star text-warning"></i></a></td>
-                    <td class="mailbox-name"><a href="read-mail.html">Alexander Pierce</a></td>
-                    <td class="mailbox-subject"><b>AdminLTE 3.0 Issue</b> - Trying to find a solution to this problem...
-                    </td>
-                    <td class="mailbox-attachment"></td>
-                    <td class="mailbox-date">5 mins ago</td>
-                  </tr>
+                    <?php
+                    $id_user = $_SESSION["id_user"];
+                    $sql = "SELECT * FROM notification WHERE id_user = '$id_user' ORDER BY created_at DESC";
+                    $result = mysqli_query($conn, $sql);
 
+                    if (mysqli_num_rows($result) > 0) {
+                      while ($row = mysqli_fetch_assoc($result)) {
+                        $notif_id = $row['id'];
+                        $pesan = $row['message'];
+                        $tanggal = date('d M Y, H:i', strtotime($row['created_at']));
+                        $type = $row['type'];
+                        $id_related = $row['id_related'];
+                        $table_related = $row['table_related'];
+                        echo "
+<tr>
+  <td onclick='event.stopPropagation();'>
+    <div class='icheck-primary'>
+      <input type='checkbox' value='$notif_id' id='check$notif_id'>
+      <label for='check$notif_id'></label>
+    </div>
+  </td>
 
-                  <tr>
-                    <td>
-                      <div class="icheck-primary">
-                        <input type="checkbox" value="" id="check15">
-                        <label for="check15"></label>
-                      </div>
-                    </td>
-                    <td class="mailbox-star"><a href="#"><i class="fas fa-star text-warning"></i></a></td>
-                    <td class="mailbox-name"><a href="read-mail.html">Alexander Pierce</a></td>
-                    <td class="mailbox-subject"><b>AdminLTE 3.0 Issue</b> - Trying to find a solution to this problem...
-                    </td>
-                    <td class="mailbox-attachment"><i class="fas fa-paperclip"></i></td>
-                    <td class="mailbox-date">15 days ago</td>
-                  </tr>
+  <td colspan='5' class='notif-row'
+      data-toggle='modal'
+      data-target='#exampleModalCenter'
+      data-id='$notif_id'
+      data-type='$type'
+      data-message='" . htmlspecialchars($pesan, ENT_QUOTES) . "'
+      data-date='$tanggal'
+      data-idrelated='$id_related'
+      data-tablerelated='$table_related'>
+    
+    <div class='d-flex'>
+      <div class='mailbox-name mr-3'>
+        <a href='#'>Sistem</a>
+      </div>
+      <div class='mailbox-subject flex-grow-1'>
+        - $pesan
+      </div>
+      <div class='mailbox-attachment'></div>
+      <div class='mailbox-date text-nowrap'>$tanggal</div>
+    </div>
+  </td>
+</tr>";
+                      }
+                    } else {
+                      echo "
+    <tr>
+        <td colspan='6' class='text-center text-muted'>
+            📭 Kamu belum punya pesan saat ini.
+        </td>
+    </tr>";
+                    }
+                    ?>
                   </tbody>
                 </table>
                 <!-- /.table -->
@@ -196,36 +220,112 @@
     </section>
     <!-- /.content -->
   </div>
-<!-- Page specific script -->
-<script>
-  $(function () {
-    //Enable check and uncheck all functionality
-    $('.checkbox-toggle').click(function () {
-      var clicks = $(this).data('clicks')
-      if (clicks) {
-        //Uncheck all checkboxes
-        $('.mailbox-messages input[type=\'checkbox\']').prop('checked', false)
-        $('.checkbox-toggle .far.fa-check-square').removeClass('fa-check-square').addClass('fa-square')
-      } else {
-        //Check all checkboxes
-        $('.mailbox-messages input[type=\'checkbox\']').prop('checked', true)
-        $('.checkbox-toggle .far.fa-square').removeClass('fa-square').addClass('fa-check-square')
-      }
-      $(this).data('clicks', !clicks)
-    })
+  <!-- detail modal -->
+  <div class="modal fade" id="exampleModalCenter" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="modalNotifTitle">Detail</h5>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+        <div class="modal-body">
+          <p id="modalNotifMessage" class="text-dark"></p>
+          <small id="modalNotifDate" class="text-muted d-block text-right mb-3"></small>
 
-    //Handle starring for font awesome
-    $('.mailbox-star').click(function (e) {
-      e.preventDefault()
-      //detect type
-      var $this = $(this).find('a > i')
-      var fa    = $this.hasClass('fa')
+          <!-- Tombol tindakan untuk invitation -->
+          <?php
 
-      //Switch states
-      if (fa) {
-        $this.toggleClass('fa-star')
-        $this.toggleClass('fa-star-o')
-      }
+          $showInvitationActions = false;
+          $hasResponded = false;
+          $invitationStatus = '';
+
+          if ($id_related) {
+            $q = mysqli_query($conn, "SELECT status FROM invitation WHERE id = '$id_related'");
+            if ($data = mysqli_fetch_assoc($q)) {
+              $invitationStatus = $data['status'];
+              $showInvitationActions = ($invitationStatus === 'pending');
+              $hasResponded = in_array($invitationStatus, ['accepted', 'declined']);
+            }
+          }
+
+          ?>
+          <?php if ($showInvitationActions): ?>
+            <div id="invitationActions" class="text-center">
+              <form method="post" action="config/proses_invitation.php" class="d-inline">
+                <input type="hidden" name="id_invitation" value="<?= $id_related ?>">
+                <input type="hidden" name="action" value="accepted">
+                <button type="submit" class="btn btn-success mr-2">✅ Accept</button>
+              </form>
+              <form method="post" action="config/proses_invitation.php" class="d-inline">
+                <input type="hidden" name="id_invitation" value="<?= $id_related ?>">
+                <input type="hidden" name="action" value="declined">
+                <button type="submit" class="btn btn-danger">❌ Decline</button>
+              </form>
+            </div>
+          <?php elseif ($hasResponded): ?>
+            <div class="text-center mt-3">
+              <button class="btn btn-outline-secondary" disabled>
+                ✅ Kamu sudah merespon undangan ini (<strong><?= ucfirst($invitationStatus) ?></strong>)
+              </button>
+            </div>
+          <?php endif; ?>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Page specific script -->
+  <script>
+    document.querySelectorAll('.notif-row').forEach(row => {
+      row.addEventListener('click', function() {
+        const type = this.dataset.type;
+        const message = this.dataset.message;
+        const date = this.dataset.date;
+        const idRelated = this.dataset.idrelated;
+
+        document.getElementById('modalNotifTitle').textContent = type.charAt(0).toUpperCase() + type.slice(1);
+        document.getElementById('modalNotifMessage').textContent = message;
+        document.getElementById('modalNotifDate').textContent = `${date}`;
+
+        // Handle tombol invitation
+        if (type === 'invitation') {
+          document.getElementById('invitationActions').classList.remove('d-none');
+          document.getElementById('inputInvitationId').value = idRelated;
+          document.getElementById('inputInvitationIdDecline').value = idRelated;
+        } else {
+          document.getElementById('invitationActions').classList.add('d-none');
+        }
+      });
+    });
+
+    $(function() {
+      //Enable check and uncheck all functionality
+      $('.checkbox-toggle').click(function() {
+        var clicks = $(this).data('clicks')
+        if (clicks) {
+          //Uncheck all checkboxes
+          $('.mailbox-messages input[type=\'checkbox\']').prop('checked', false)
+          $('.checkbox-toggle .far.fa-check-square').removeClass('fa-check-square').addClass('fa-square')
+        } else {
+          //Check all checkboxes
+          $('.mailbox-messages input[type=\'checkbox\']').prop('checked', true)
+          $('.checkbox-toggle .far.fa-square').removeClass('fa-square').addClass('fa-check-square')
+        }
+        $(this).data('clicks', !clicks)
+      })
+
+      //Handle starring for font awesome
+      $('.mailbox-star').click(function(e) {
+        e.preventDefault()
+        //detect type
+        var $this = $(this).find('a > i')
+        var fa = $this.hasClass('fa')
+
+        //Switch states
+        if (fa) {
+          $this.toggleClass('fa-star')
+          $this.toggleClass('fa-star-o')
+        }
+      })
     })
-  })
-</script>
+  </script>
