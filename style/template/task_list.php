@@ -15,7 +15,7 @@ while ($data = mysqli_fetch_array($res)) {
     </div>
     <div class="card-body">
       <p><?php echo $data['desc_task']; ?></p>
-      <p class="text-secondary"><?php echo $data['start_task']; ?></p>
+      <p class="text-secondary"><?php echo $data['created_at']; ?></p>
     </div>
   </div>
 
