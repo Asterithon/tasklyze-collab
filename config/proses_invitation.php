@@ -28,7 +28,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     }
 
     echo "<script>
-        alert('Tanggapan berhasil dikirim!');
         window.location = '../';
     </script>";
 }

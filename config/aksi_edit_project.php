@@ -13,7 +13,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             WHERE id_project = '$id_project'";
 
     if (mysqli_query($conn, $sql)) {
-        echo "<script>alert('Project updated successfully!'); window.location = '../?page=project&&id=$id_project';</script>";
+        echo "<script>window.location = '../?page=project&&id=$id_project';</script>";
     } else {
         echo "<script>alert('Failed to update project.'); window.history.back();</script>";
     }

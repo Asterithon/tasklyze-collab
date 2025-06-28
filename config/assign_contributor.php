@@ -21,7 +21,7 @@ $insertNotif = "INSERT INTO notification
 mysqli_query($conn, $insertNotif);
 
 echo "<script>
-  alert('Contributor assigned successfully.');
+  
   window.location = '../?page=project&&id=$id_project';
 </script>";
 ?>

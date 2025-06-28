@@ -30,7 +30,6 @@ if ($data = mysqli_fetch_assoc($query)) {
     }
 
     echo "<script>
-        alert('Undangan berhasil dikirim!');
         window.location = '../?page=project&&id=$id_project'; // atau arahkan ke halaman project
     </script>";
 } else {

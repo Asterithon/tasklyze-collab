@@ -13,7 +13,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     mysqli_query($conn, $sql);
 
     echo "<script>
-        alert('Role berhasil diperbarui!');
+        
         window.location = '../?page=project&id=$id_project'; // arahkan ke halaman project
     </script>";
 }
