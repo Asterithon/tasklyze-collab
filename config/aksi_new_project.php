@@ -17,19 +17,17 @@ try {
     $newProjectID = mysqli_insert_id($conn); // Ambil ID project baru
 
     // Insert ke relasi user dengan project
-    $sql2 = "INSERT INTO `r_user_project`(`id_user`, `id_project`, `role`) 
+    $sql2 = "INSERT INTO `r_user_project`(`id_user`, `id_project`, `role`)  
              VALUES ('$id_user', '$newProjectID', 'admin')";
     mysqli_query($conn, $sql2);
 
     mysqli_commit($conn);
 
     echo "<script>
-        window.location = '../';
+        window.location = '../?page=project&id=$newProjectID';
     </script>";
 } catch (Exception $e) {
     mysqli_rollback($conn);
-    echo "<script>
-
-    </script>";
+    echo "<script>alert('Failed to create project.'); window.history.back();</script>";
 }
 ?>

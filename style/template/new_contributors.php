@@ -1,12 +1,13 @@
-                                <a href="" class="btn btn-tool" data-toggle="modal" data-target="#modal-xl">
+                                <a href="" class="btn btn-tool" data-toggle="modal" data-target="#modal-contributor">
                                     <i class="fas fa-pen"></i>
                                 </a>
 <!-- modal invite -->
-<div class="modal fade" id="modal-xl">
+<div class="modal fade" id="modal-contributor" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+  aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title">Contributors</h4>
+                <h4 class="modal-title">Add Contributors</h4>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -15,12 +16,7 @@
                 <div class="row">
                     <!-- Kontributor Aktif -->
                     <div class="col-md-6 border-right pr-3" style="max-height: 33vh; overflow-y: auto;">
-
-                        <?php
-
-
-                        ?>
-                            <h6 class="text-success mb-3 mt-5">⏳ Pending Invitations</h6>
+                            <h6 class="text-success mb-3">⏳ Pending Invitations</h6>
 
                             <?php
                             $sqlPending = "SELECT i.id_receiver, u.username

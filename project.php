@@ -43,12 +43,14 @@
     <div class="card-header">
         <h5 class="card-title"><?= $name_project ?></h5>
         <div class="card-tools">
-            <a href="#" class="btn btn-tool btn-link">#7</a>
-            <a href="#" class="btn btn-tool">
+
+            <a href="#" class="btn btn-tool" data-bs-toggle="modal"
+                        data-bs-target="#projectEdit<?php echo $id_project; ?>">
+                        
                 <i class="fas fa-pen"></i>
             </a>
         </div>
-    </div>
+    </div><?php include "style/template/edit_project.php"; ?>
     <div class="card-body">
         <p><?= $desc_project ?></p>
     </div>
@@ -57,7 +59,7 @@
                         <div class="card-header">
                             <h5 class="card-title">Create New Task</h5>
                             <div class="card-tools">
-                                <a href="#" class="btn btn-tool btn-link">#6</a>
+                                <a href="#" class="btn btn-tool btn-link"></a>
                                 <a href="#" class="btn btn-tool">
                                     <i class="fas fa-pen"></i>
                                 </a>
@@ -68,62 +70,70 @@
                         <div class="card-header">
                             <h5 class="card-title">Contributors</h5>
                             <div class="card-tools">
-                                <?php include "style/template/contributors.php"; ?>
+                                <?php include "style/template/new_contributors.php"; ?>
 
                             </div>
                         </div>
                         <div class="card-body">
-                        <?php
-                        // contributor list
-                        $id_project = $_GET['id'];
-                        $id_user = $_SESSION['id_user'];
+<div class="table-responsive">
+  <table class="table table-hover mb-0">
+    <tbody>
+      <?php
+      $id_project = $_GET['id'];
+      $id_user = $_SESSION['id_user'];
 
-                        $sql = "SELECT user.id_user, user.username, user.email, r_user_project.role
-        FROM r_user_project
-        JOIN user ON r_user_project.id_user = user.id_user
-        WHERE r_user_project.id_project = '$id_project'
-        ORDER BY 
-            CASE r_user_project.role
-                WHEN 'admin' THEN 0
-                WHEN 'member' THEN 1
-                ELSE 2
-            END,
-            user.username ASC";
-                        $result = mysqli_query($conn, $sql);
+      $sql = "SELECT user.id_user, user.username, user.email, r_user_project.role
+              FROM r_user_project
+              JOIN user ON r_user_project.id_user = user.id_user
+              WHERE r_user_project.id_project = '$id_project'
+              ORDER BY 
+                  CASE r_user_project.role
+                      WHEN 'admin' THEN 0
+                      WHEN 'member' THEN 1
+                      ELSE 2
+                  END,
+                  user.username ASC";
 
-if (mysqli_num_rows($result) > 0) {
-    $i = 1;
-    while ($row = mysqli_fetch_assoc($result)) {
-        $nama = $row['username'];
-        $email = $row['email'];
-        $role = $row['role'];
-        $tag = $row['id_user'] == $id_user ? "<span class='text-info mr-2'>you</span>" : "";
-        $id_contributor = $row['id_user'];
-        echo "
-                                <div class='d-flex justify-content-between align-items-center mb-2'>
-                                <div class='text-truncate'><i class='fas fa-user text-muted mr-2'></i> $nama</div>
-                                
-                                <div>
-                                    $tag
-                                    <span class='badge badge-secondary role-badge' 
-                                            data-toggle='modal' 
-                                            data-target='#modalChangeRole$id_contributor' style='cursor: pointer; min-width: 80px;'>
-                                        $role
-                                    </span>
-                                    </div>
-                                </div>"; 
-        include("style/template/contributors_role.php");
-        $i++;
-    }
-} else {
-    echo "<p class='text-muted'>Belum ada kontributor untuk project ini.</p>";
-}// contributor list
-?>
+      $result = mysqli_query($conn, $sql);
+
+      if (mysqli_num_rows($result) > 0) {
+          while ($row = mysqli_fetch_assoc($result)) {
+              $id_contributor = $row['id_user'];
+              $nama = $row['username'];
+              $email = $row['email'];
+              $role = $row['role'];
+              $tag = $id_contributor == $id_user ? "<span class='text-info mr-2'>you</span>" : '';
+
+              echo "
+              <tr class='contributor-row' 
+                  data-toggle='modal' 
+                  data-target='#modalChangeRole$id_contributor' 
+                  style='cursor: pointer;'>
+                <td>
+                  <div class='font-weight-bold mb-1'>$nama</div>
+                  <div class='text-muted small'>$email</div>
+                </td>
+                <td class='text-right align-middle'>
+                  $tag
+                  <span class='badge badge-secondary' style='min-width: 80px;'>$role</span>
+                </td>
+              </tr>";
+
+              include("style/template/contributors_role.php");
+          }
+      } else {
+          echo "<tr><td colspan='2' class='text-muted text-center'>Belum ada kontributor untuk project ini.</td></tr>";
+      }
+      ?>
+    </tbody>
+  </table>
+</div>
+
                         </div>
                     </div>
                     <div class="card card-primary card-outline">
                         <div class="card-header">
-                            <h5 class="card-title">Invite</h5>
+                            <h5 class="card-title">Stats</h5>
                             <div class="card-tools">
                                 <a href="#" class="btn btn-tool btn-link">#4</a>
                                 <a href="#" class="btn btn-tool">
