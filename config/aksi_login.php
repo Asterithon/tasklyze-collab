@@ -13,7 +13,7 @@ $data =mysqli_fetch_assoc($login);
 $_SESSION['level'] = "user";
 $_SESSION['id_user'] = $data['id_user'];
 $_SESSION['username'] = $data['username'];
-header(header: 'location:../?user=' . $_SESSION['username'] . '&id=' . $_SESSION['id_user'] . '' . $_SESSION['level'] . '');
+header('location:../?user=' . $_SESSION['username'] . '&id=' . $_SESSION['id_user'] . '' . $_SESSION['level'] . '');
 } 
 
 else {
