@@ -114,36 +114,60 @@
               <div class="table-responsive mailbox-messages">
                 <table class="table table-hover table-striped">
                   <tbody>
-                  <tr>
-                    <td>
-                      <div class="icheck-primary">
-                        <input type="checkbox" value="" id="check1">
-                        <label for="check1"></label>
-                      </div>
-                    </td>
-                    <td class="mailbox-star"><a href="#"><i class="fas fa-star text-warning"></i></a></td>
-                    <td class="mailbox-name"><a href="read-mail.html">Alexander Pierce</a></td>
-                    <td class="mailbox-subject"><b>AdminLTE 3.0 Issue</b> - Trying to find a solution to this problem...
-                    </td>
-                    <td class="mailbox-attachment"></td>
-                    <td class="mailbox-date">5 mins ago</td>
-                  </tr>
+                    <?php
+                    $id_user = $_SESSION["id_user"];
+                    $sql = "SELECT * FROM notification WHERE id_user = '$id_user' ORDER BY created_at DESC";
+                    $result = mysqli_query($conn, $sql);
 
+                    if (mysqli_num_rows($result) > 0) {
+                      while ($row = mysqli_fetch_assoc($result)) {
+                        $notif_id = $row['id'];
+                        $pesan = $row['message'];
+                        $tanggal = date('d M Y, H:i', strtotime($row['created_at']));
+                        $type = $row['type'];
+                        $id_related = $row['id_related'];
+                        $table_related = $row['table_related'];
+                        echo "
+<tr>
+  <td onclick='event.stopPropagation();'>
+    <div class='icheck-primary'>
+      <input type='checkbox' value='$notif_id' id='check$notif_id'>
+      <label for='check$notif_id'></label>
+    </div>
+  </td>
 
-                  <tr>
-                    <td>
-                      <div class="icheck-primary">
-                        <input type="checkbox" value="" id="check15">
-                        <label for="check15"></label>
-                      </div>
-                    </td>
-                    <td class="mailbox-star"><a href="#"><i class="fas fa-star text-warning"></i></a></td>
-                    <td class="mailbox-name"><a href="read-mail.html">Alexander Pierce</a></td>
-                    <td class="mailbox-subject"><b>AdminLTE 3.0 Issue</b> - Trying to find a solution to this problem...
-                    </td>
-                    <td class="mailbox-attachment"><i class="fas fa-paperclip"></i></td>
-                    <td class="mailbox-date">15 days ago</td>
-                  </tr>
+  <td colspan='5' class='notif-row'
+      data-toggle='modal'
+      data-target='#notif$notif_id'
+      data-id='$notif_id'
+      data-type='$type'
+      data-message='" . htmlspecialchars($pesan, ENT_QUOTES) . "'
+      data-date='$tanggal'
+      data-idrelated='$id_related'
+      data-tablerelated='$table_related'>
+    
+    <div class='d-flex'>
+      <div class='mailbox-name mr-3'>
+        <a href='#'>$type</a>
+      </div>
+      <div class='mailbox-subject flex-grow-1'>
+        - $pesan
+      </div>
+      <div class='mailbox-attachment'></div>
+      <div class='mailbox-date text-nowrap'>$tanggal</div>
+    </div>
+  </td>
+</tr>"; include "style/template/modal_mailbox.php";
+                      }
+                    } else {
+                      echo "
+    <tr>
+        <td colspan='6' class='text-center text-muted'>
+            📭 Kamu belum punya pesan saat ini.
+        </td>
+    </tr>";
+                    }
+                    ?>
                   </tbody>
                 </table>
                 <!-- /.table -->
@@ -196,36 +220,59 @@
     </section>
     <!-- /.content -->
   </div>
-<!-- Page specific script -->
-<script>
-  $(function () {
-    //Enable check and uncheck all functionality
-    $('.checkbox-toggle').click(function () {
-      var clicks = $(this).data('clicks')
-      if (clicks) {
-        //Uncheck all checkboxes
-        $('.mailbox-messages input[type=\'checkbox\']').prop('checked', false)
-        $('.checkbox-toggle .far.fa-check-square').removeClass('fa-check-square').addClass('fa-square')
-      } else {
-        //Check all checkboxes
-        $('.mailbox-messages input[type=\'checkbox\']').prop('checked', true)
-        $('.checkbox-toggle .far.fa-square').removeClass('fa-square').addClass('fa-check-square')
-      }
-      $(this).data('clicks', !clicks)
-    })
 
-    //Handle starring for font awesome
-    $('.mailbox-star').click(function (e) {
-      e.preventDefault()
-      //detect type
-      var $this = $(this).find('a > i')
-      var fa    = $this.hasClass('fa')
+  <!-- Page specific script -->
+  <script>
+    document.querySelectorAll('.notif-row').forEach(row => {
+      row.addEventListener('click', function() {
+        const type = this.dataset.type;
+        const message = this.dataset.message;
+        const date = this.dataset.date;
+        const idRelated = this.dataset.idrelated;
 
-      //Switch states
-      if (fa) {
-        $this.toggleClass('fa-star')
-        $this.toggleClass('fa-star-o')
-      }
+        document.getElementById('modalNotifTitle').textContent = type.charAt(0).toUpperCase() + type.slice(1);
+        document.getElementById('modalNotifMessage').textContent = `${message}`;
+        document.getElementById('modalNotifDate').textContent = `${date}`;
+
+        // Handle tombol invitation
+        if (type === 'invitation') {
+          document.getElementById('invitationActions').classList.remove('d-none');
+          document.getElementById('inputInvitationId').value = idRelated;
+          document.getElementById('inputInvitationIdDecline').value = idRelated;
+        } else {
+          document.getElementById('invitationActions').classList.add('d-none');
+        }
+      });
+    });
+
+    $(function() {
+      //Enable check and uncheck all functionality
+      $('.checkbox-toggle').click(function() {
+        var clicks = $(this).data('clicks')
+        if (clicks) {
+          //Uncheck all checkboxes
+          $('.mailbox-messages input[type=\'checkbox\']').prop('checked', false)
+          $('.checkbox-toggle .far.fa-check-square').removeClass('fa-check-square').addClass('fa-square')
+        } else {
+          //Check all checkboxes
+          $('.mailbox-messages input[type=\'checkbox\']').prop('checked', true)
+          $('.checkbox-toggle .far.fa-square').removeClass('fa-square').addClass('fa-check-square')
+        }
+        $(this).data('clicks', !clicks)
+      })
+
+      //Handle starring for font awesome
+      $('.mailbox-star').click(function(e) {
+        e.preventDefault()
+        //detect type
+        var $this = $(this).find('a > i')
+        var fa = $this.hasClass('fa')
+
+        //Switch states
+        if (fa) {
+          $this.toggleClass('fa-star')
+          $this.toggleClass('fa-star-o')
+        }
+      })
     })
-  })
-</script>
+  </script>
