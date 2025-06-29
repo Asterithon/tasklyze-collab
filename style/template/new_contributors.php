@@ -1,6 +1,4 @@
-                                <a href="" class="btn btn-tool" data-toggle="modal" data-target="#modal-contributor">
-                                    <i class="fas fa-pen"></i>
-                                </a>
+
 <!-- modal invite -->
 <div class="modal fade" id="modal-contributor" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
   aria-labelledby="staticBackdropLabel" aria-hidden="true">

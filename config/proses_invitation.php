@@ -28,7 +28,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     }
 
     echo "<script>
-        window.location = '../';
+        window.location = '../?page=project&&id=$id_project';;
     </script>";
 }
 ?>

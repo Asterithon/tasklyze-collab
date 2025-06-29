@@ -39,15 +39,27 @@ session_start();
     <link rel="stylesheet" href="style/css/daterangepicker.css">
   </contain-style>
 </head>
-
+<style>
+  .task-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  gap: 1rem;
+  justify-content: start;
+}
+</style>
 <body class="hold-transition sidebar-mini layout-fixed">
   <!-- wrapper -->
   <div class="wrapper">
 
     <!-- Preloader -->
     <div class="preloader flex-column justify-content-center align-items-center">
-      <img class="animation__shake" src="dist/img/AdminLTELogo.png" alt="AdminLTELogo" height="60" width="60">
+        <img src="asset/img/logo_1.webp" class="img-thumbnail mb-4 border border-0" alt="Logo" style="width: 100px; height: auto;">
+  <div class="text-center flex-column justify-content-center">
+    <div class="spinner-border text-primary mr-3" role="status"></div>
+    <p class="h4 text-primary">Please Wait...</p>
+  </div>
     </div>
+
 
     <!-- Navbar -->
     <?php
