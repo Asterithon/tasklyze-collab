@@ -38,7 +38,14 @@
                 <li class="nav-item active">
                   <a href="#" class="nav-link">
                     <i class="fas fa-inbox"></i> Inbox
-                    <span class="badge bg-primary float-right">12</span>
+                    <?php
+$id_user = $_SESSION['id_user'];
+$q_read = mysqli_query($conn, "SELECT COUNT(*) AS total_read FROM notification WHERE id_user = '$id_user' AND is_read = 0");
+$data_read = mysqli_fetch_assoc($q_read);
+$total_read = $data_read['total_read'];
+if ($total_read > 0): ?>
+  <span id="badge-read-count" class="badge bg-primary float-right"><?= $total_read ?></span>
+<?php endif; ?>
                   </a>
                 </li>
                 <li class="nav-item">
@@ -86,29 +93,11 @@
                   <button type="button" class="btn btn-default btn-sm">
                     <i class="far fa-trash-alt"></i>
                   </button>
-                  <button type="button" class="btn btn-default btn-sm">
-                    <i class="fas fa-reply"></i>
-                  </button>
-                  <button type="button" class="btn btn-default btn-sm">
-                    <i class="fas fa-share"></i>
-                  </button>
                 </div>
                 <!-- /.btn-group -->
                 <button type="button" class="btn btn-default btn-sm">
                   <i class="fas fa-sync-alt"></i>
                 </button>
-                <div class="float-right">
-                  1-50/200
-                  <div class="btn-group">
-                    <button type="button" class="btn btn-default btn-sm">
-                      <i class="fas fa-chevron-left"></i>
-                    </button>
-                    <button type="button" class="btn btn-default btn-sm">
-                      <i class="fas fa-chevron-right"></i>
-                    </button>
-                  </div>
-                  <!-- /.btn-group -->
-                </div>
                 <!-- /.float-right -->
               </div>
               <div class="table-responsive mailbox-messages">
@@ -185,29 +174,12 @@
                   <button type="button" class="btn btn-default btn-sm">
                     <i class="far fa-trash-alt"></i>
                   </button>
-                  <button type="button" class="btn btn-default btn-sm">
-                    <i class="fas fa-reply"></i>
-                  </button>
-                  <button type="button" class="btn btn-default btn-sm">
-                    <i class="fas fa-share"></i>
-                  </button>
                 </div>
                 <!-- /.btn-group -->
                 <button type="button" class="btn btn-default btn-sm">
                   <i class="fas fa-sync-alt"></i>
                 </button>
-                <div class="float-right">
-                  1-50/200
-                  <div class="btn-group">
-                    <button type="button" class="btn btn-default btn-sm">
-                      <i class="fas fa-chevron-left"></i>
-                    </button>
-                    <button type="button" class="btn btn-default btn-sm">
-                      <i class="fas fa-chevron-right"></i>
-                    </button>
-                  </div>
-                  <!-- /.btn-group -->
-                </div>
+                
                 <!-- /.float-right -->
               </div>
             </div>
@@ -223,27 +195,25 @@
 
   <!-- Page specific script -->
   <script>
-    document.querySelectorAll('.notif-row').forEach(row => {
-      row.addEventListener('click', function() {
-        const type = this.dataset.type;
-        const message = this.dataset.message;
-        const date = this.dataset.date;
-        const idRelated = this.dataset.idrelated;
+  document.querySelectorAll('.notif-row').forEach(row => {
+    row.addEventListener('click', function () {
+      const notifId = this.dataset.id;
 
-        document.getElementById('modalNotifTitle').textContent = type.charAt(0).toUpperCase() + type.slice(1);
-        document.getElementById('modalNotifMessage').textContent = `${message}`;
-        document.getElementById('modalNotifDate').textContent = `${date}`;
-
-        // Handle tombol invitation
-        if (type === 'invitation') {
-          document.getElementById('invitationActions').classList.remove('d-none');
-          document.getElementById('inputInvitationId').value = idRelated;
-          document.getElementById('inputInvitationIdDecline').value = idRelated;
-        } else {
-          document.getElementById('invitationActions').classList.add('d-none');
-        }
-      });
+      // Kirim AJAX untuk tandai sebagai dibaca dan ambil jumlah baru
+      fetch(`config/mark_read.php?id=${notifId}`)
+        .then(response => response.text())
+        .then(count => {
+          document.getElementById('badge-read-count').textContent = count;
+        });
     });
+  });
+
+  document.querySelectorAll('.notif-row').forEach(row => {
+    row.addEventListener('click', function () {
+      const notifId = this.dataset.id;
+      fetch(`config/mark_read.php?id=${notifId}`);
+    });
+  });
 
     $(function() {
       //Enable check and uncheck all functionality

@@ -8,7 +8,7 @@
     $result = mysqli_query($conn, $sql);
 
     if ($result) {
-        echo "<script>alert('Account succesfully created');
+        echo "<script>
         window.location = '../';</script>";
     } else {
     echo "<script>alert('Account Failed to create');

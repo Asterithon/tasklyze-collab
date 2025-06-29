@@ -9,7 +9,7 @@ $sql = "UPDATE task SET name_task = '$title', desc_task = '$description' WHERE i
 $result = mysqli_query($conn, $sql);
 
 if ($result) {
-    echo "<script>alert('Task succesfully Updated');
+    echo "<script>
         window.location = '../?page=project&&id=$id_project';</script>";
 } else {
     echo "<script>alert('Task Failed to create');
