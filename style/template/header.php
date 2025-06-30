@@ -155,7 +155,9 @@
   <a href="index.php" class="brand-link">
     <span class="brand-text font-weight-bold text-center">Tasklyze</span>
   </a>
-
+<?php
+$currentPage = $_GET['page'] ?? '';
+?>
   <!-- Sidebar -->
   <div class="sidebar">
     <!-- Sidebar user panel (optional) -->
@@ -185,7 +187,7 @@
       <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
         <!-- Add icons to the links using the .nav-icon class with font-awesome or any other icon font library -->
         <li class="nav-item menu-open">
-          <a href="#" class="nav-link active">
+          <a href="#" class="nav-link <?= ($currentPage === 'project' or $currentPage === 'new_project') ? 'active' : ''; ?>">
             <i class="nav-icon fas fa-tachometer-alt"></i>
             <p>
               Projects
@@ -193,44 +195,48 @@
             </p>
           </a>
           <ul class="nav nav-treeview">
-            <?php
-            $sql = "SELECT * FROM r_user_project 
+<?php
+$sql = "SELECT * FROM r_user_project 
+  LEFT JOIN user ON r_user_project.id_user = user.id_user 
+  LEFT JOIN project ON r_user_project.id_project = project.id_project 
+  WHERE user.id_user = '" . $_SESSION['id_user'] . "'";
+$res = mysqli_query($conn, $sql);
 
-        LEFT JOIN user ON r_user_project.id_user = user.id_user 
-        LEFT JOIN project ON r_user_project.id_project = project.id_project 
-        WHERE user.id_user = '" . $_SESSION['id_user'] . "'";
-            $res = mysqli_query($conn, $sql);
+$currentProjectId = $_GET['id'] ?? null;
 
-            // Cek apakah ada data yang ditemukan
-            if (mysqli_num_rows($res) > 0) {
-              while ($data = mysqli_fetch_array($res)) { ?>
-                <li class="nav-item">
-                  <a href="index.php?page=project&&id=<?php echo $data['id_project']; ?>" class="nav-link">
-                    <i class="far fa-circle nav-icon"></i>
-                    <p><?php echo $data['name_project']; ?></p>
-                  </a>
-                </li>
-              <?php }
-            } else {
-              echo '<p class="pb-1 text-center text-warning fw-bold">You don\'t have any project yet!</p>';
-            }
-            ?>
-            <li class="nav-item">
-              <a class="nav-link" href="?page=new_project">
-                <i class="far fa-plus nav-icon"></i>
-                <p>Create New Project</p>
-              </a>
-            </li>
+if (mysqli_num_rows($res) > 0) {
+  while ($data = mysqli_fetch_array($res)) {
+    $isActive = ($currentProjectId == $data['id_project']) ? 'active' : '';
+    ?>
+    <li class="nav-item">
+      <a href="index.php?page=project&&id=<?php echo $data['id_project']; ?>" class="pl-4 nav-link overflow-hidden <?= $isActive ?>">
+        <i class="far fa-circle nav-icon"></i>
+        <p class="p fs-5 text-truncate mb-0"><?php echo $data['name_project']; ?></p>
+      </a>
+    </li>
+  <?php }
+} else {
+  echo '<p class="pb-1 text-center text-warning fw-bold">You don\'t have any project yet!</p>';
+}
+?>
+
+
+<li class="nav-item">
+  <a class="nav-link <?= ($currentPage === 'new_project') ? 'active' : '' ?>" href="?page=new_project">
+    <i class="far fa-plus nav-icon"></i>
+    <p>Create New Project</p>
+  </a>
+</li>
+
           </ul>
         </li>
-          <li class="nav-item">
-            <a href="?page=mailbox" class="nav-link">
-              <i class="nav-icon far fa-envelope"></i>
-              <p>
-                Mailbox
-              </p>
-            </a>
-          </li>
+<li class="nav-item">
+  <a href="?page=mailbox" class="nav-link <?= ($currentPage === 'mailbox') ? 'active' : '' ?>">
+    <i class="nav-icon far fa-envelope"></i>
+    <p>Mailbox</p>
+  </a>
+</li>
+
       </ul>
     </nav>
     <!-- /.sidebar-menu -->
