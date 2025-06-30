@@ -67,11 +67,11 @@ session_start();
         include 'style/template/header.php';
         if (isset($_GET['page'])) {
           $page = $_GET['page'];
-
-          // add new page here 
+          // add new page here
+          // Cleanup biar urut, Notice org bakal bingung naruh page di template/style, dua kombinasi direktori yg linglung >x<
           switch ($page) {
-            case 'mailbox';
-              include 'style/template/mailbox.php';
+            case 'dashboard';
+              include 'style/template/dashboard.php';
               break;
             case 'project';
               include 'project.php';
@@ -79,21 +79,20 @@ session_start();
             case 'new_project';
               include 'style/template/new_project.php';
               break;
+            case 'mailbox';
+              include 'style/template/mailbox.php';
+              break;
             default:
               include '404.php';
               break;
           }
         } else {
-          include 'dashboard.php';
+          include 'style/template/dashboard.php';
         }
       } else {
         include 'landing_page.php';}
-
-      
     ?>
     <!-- /.content-wrapper -->
-
-
   </div>
   <!-- ./wrapper -->
 
