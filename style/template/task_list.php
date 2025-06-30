@@ -238,16 +238,43 @@ if (mysqli_num_rows($res) === 0): ?>
                   <button type="submit" class="btn btn-success mb-2">Assign</button>
                 </form>
 
-                <!-- Admin: Assign self if not yet assigned -->
-                <?php if (!$isAssigned): ?>
-                  <form method="POST" action="config/aksi_self_task.php" class="mt-3">
-                    <input type="hidden" name="id_task" value="<?php echo $id_task; ?>">
-                    <input type="hidden" name="id_project" value="<?php echo $id_project; ?>">
-                    <input type="hidden" name="id_user" value="<?php echo $id_user; ?>">
-                    <h6 class="mb-2">Assign This Task to Yourself</h6>
-                    <button type="submit" name="action" value="assign" class="btn btn-outline-primary">Assign to Me</button>
-                  </form>
-                <?php endif; ?>
+
+  <!-- Admin: Self-task actions -->
+  <?php if ($isAssigned): 
+    $statusQuery = mysqli_query($conn, "SELECT status FROM r_user_task WHERE id_user = '$id_user' AND id_task = '$id_task'");
+    $statusData = mysqli_fetch_assoc($statusQuery);
+    $currentStatus = $statusData['status'] ?? '';
+  ?>
+    <h6 class="mb-2 mt-3">Leave or Update Your Task Status</h6>
+    <div class="d-flex justify-content-between">
+      <form method="POST" action="config/aksi_self_task.php" class="me-2">
+        <input type="hidden" name="id_task" value="<?php echo $id_task; ?>">
+        <input type="hidden" name="id_project" value="<?php echo $id_project; ?>">
+        <input type="hidden" name="id_user" value="<?php echo $id_user; ?>">
+        <button type="submit" name="action" value="leave" class="btn btn-outline-danger">Leave Task</button>
+      </form>
+
+      <form method="POST" action="config/aksi_self_task.php">
+        <input type="hidden" name="id_task" value="<?php echo $id_task; ?>">
+        <input type="hidden" name="id_project" value="<?php echo $id_project; ?>">
+        <input type="hidden" name="id_user" value="<?php echo $id_user; ?>">
+        <?php if ($currentStatus === 'done'): ?>
+          <button type="submit" name="action" value="mark_progress" class="btn btn-outline-warning">Back to Progress</button>
+        <?php else: ?>
+          <button type="submit" name="action" value="mark_done" class="btn btn-outline-success">Mark as Done</button>
+        <?php endif; ?>
+      </form>
+    </div>
+  <?php else: ?>
+    <!-- Admin: Assign self if not yet assigned -->
+    <form method="POST" action="config/aksi_self_task.php" class="mt-3">
+      <input type="hidden" name="id_task" value="<?php echo $id_task; ?>">
+      <input type="hidden" name="id_project" value="<?php echo $id_project; ?>">
+      <input type="hidden" name="id_user" value="<?php echo $id_user; ?>">
+      <h6 class="mb-2">Assign This Task to Yourself</h6>
+      <button type="submit" name="action" value="assign" class="btn btn-outline-primary">Assign to Me</button>
+    </form>
+  <?php endif; ?>
 
               <?php elseif ($userRole === 'member'): ?>
                 <!-- Member: Assign self or leave task -->
