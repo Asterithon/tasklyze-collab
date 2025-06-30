@@ -1,3 +1,4 @@
+<!-- Shouldn't The Entire Page Called sidebar.php for relevancy ?  -->
 <!-- Navbar -->
 <nav class="main-header navbar navbar-expand navbar-white navbar-light">
   <!-- Left navbar links -->
@@ -11,16 +12,16 @@
     <li class="nav-item d-none d-sm-inline-block">
       <a href="#" class="nav-link">Contact</a>
     </li>
-                            <!-- modal -->
-                        <?php
-                        if (isset($_SESSION['level'])) {
-                            echo '<a class="btn btn-danger" href="logout.php">Keluar</a>';
-                        } else {
-                            include("login.php");
-                        }
+      <!-- modal -->
+      <?php
+      if (isset($_SESSION['level'])) {
+          echo '<a class="btn btn-danger" href="logout.php">Keluar</a>';
+      } else {
+          include("login.php");
+      }
 
-                        ?>
-                        <!-- /Modal -->
+      ?>
+      <!-- /Modal -->
   </ul>
 
   <!-- Right navbar links -->
@@ -153,6 +154,7 @@
   <!-- Brand Logo -->
 
   <a href="index.php" class="brand-link">
+    <!-- Note: Untuk dimasukan logo dari asset/img/logo_white_2.webp kesini  -->
     <span class="brand-text font-weight-bold text-center">Tasklyze</span>
   </a>
 
@@ -164,7 +166,7 @@
       </div>
       <div class="info">
 
-        <a href="#" class="d-block">Wellcome, <?php echo $_SESSION['username']; ?>!</a>
+        <a href="#" class="d-block">Welcome, <?php echo $_SESSION['username']; ?>!</a>
       </div>
     </div>
 
@@ -180,10 +182,21 @@
       </div>
     </div>
 
-    <!-- Sidebar Menu -->
+    <!-- Sidebar Menu --> 
     <nav class="mt-2">
       <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
         <!-- Add icons to the links using the .nav-icon class with font-awesome or any other icon font library -->
+        <!-- Dashboard, Took me a while to figure out >x<, 
+         Note to everyone: blom ada kondisi ketika highlight aktif -->
+        <li class="nav-item">
+            <a href="?page=dashboard" class="nav-link">
+              <i class="nav-icon fas fa-home"></i>
+              <p>
+                Dashboard
+              </p>
+            </a>
+          </li>
+        <!-- Projects -->
         <li class="nav-item menu-open">
           <a href="#" class="nav-link active">
             <i class="nav-icon fas fa-tachometer-alt"></i>
@@ -194,13 +207,11 @@
           </a>
           <ul class="nav nav-treeview">
             <?php
-            $sql = "SELECT * FROM r_user_project 
-
+            $sql = "SELECT * FROM r_user_project
         LEFT JOIN user ON r_user_project.id_user = user.id_user 
         LEFT JOIN project ON r_user_project.id_project = project.id_project 
         WHERE user.id_user = '" . $_SESSION['id_user'] . "'";
             $res = mysqli_query($conn, $sql);
-
             // Cek apakah ada data yang ditemukan
             if (mysqli_num_rows($res) > 0) {
               while ($data = mysqli_fetch_array($res)) { ?>
@@ -223,6 +234,7 @@
             </li>
           </ul>
         </li>
+        <!-- Mailbox -->
           <li class="nav-item">
             <a href="?page=mailbox" class="nav-link">
               <i class="nav-icon far fa-envelope"></i>
