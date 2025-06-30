@@ -157,7 +157,9 @@
     <!-- Note: Untuk dimasukan logo dari asset/img/logo_white_2.webp kesini  -->
     <span class="brand-text font-weight-bold text-center">Tasklyze</span>
   </a>
-
+<?php
+$currentPage = $_GET['page'] ?? '';
+?>
   <!-- Sidebar -->
   <div class="sidebar">
     <!-- Sidebar user panel (optional) -->
@@ -198,7 +200,7 @@
           </li>
         <!-- Projects -->
         <li class="nav-item menu-open">
-          <a href="#" class="nav-link active">
+          <a href="#" class="nav-link <?= ($currentPage === 'project' or $currentPage === 'new_project') ? 'active' : ''; ?>">
             <i class="nav-icon fas fa-tachometer-alt"></i>
             <p>
               Projects
@@ -206,6 +208,7 @@
             </p>
           </a>
           <ul class="nav nav-treeview">
+
             <?php
             $sql = "SELECT * FROM r_user_project
         LEFT JOIN user ON r_user_project.id_user = user.id_user 
