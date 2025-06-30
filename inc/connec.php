@@ -1,3 +1,4 @@
+<!-- Why 'connec' ?x? note to self: dun forget to add try except rule for docker run -->
 <?php
     $username = "root";
     $pass = "";
