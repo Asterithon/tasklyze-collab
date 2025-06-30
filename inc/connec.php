@@ -1,9 +1,13 @@
-<!-- Why 'connec' ?x? note to self: dun forget to add try except rule for docker run -->
-<?php
-    $username = "root";
-    $pass = "";
-    $host = "localhost";
-    $database = "db_tasklyze";
+<?php // Fallback to localhost if not found in env using ?: (Not exposing password) (Just a docker function)
+$host     = getenv("DB_HOST") ?: "localhost";
+$username = getenv("DB_USER") ?: "root";
+$password = getenv("DB_PASS") ?: "";
+$database = getenv("DB_NAME") ?: "db_tasklyze";
 
-    $conn = mysqli_connect($host, $username, $pass, $database);
+$conn = mysqli_connect($host, $username, $password, $database);
+
+// Error MsG
+if (!$conn) {
+    exit("Gagal terkoneksi Database: " . mysqli_connect_error());
+}
 ?>
