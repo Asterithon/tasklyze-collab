@@ -13,5 +13,12 @@ if ($action === 'assign') {
     $delete = "DELETE FROM r_user_task WHERE id_user = '$id_user' AND id_task = '$id_task'";
     mysqli_query($conn, $delete);
 }
+elseif ($action === 'mark_done') {
+    $update = "UPDATE r_user_task SET status = 'done' WHERE id_user = '$id_user' AND id_task = '$id_task'";
+    mysqli_query($conn, $update);
+} elseif ($action === 'mark_progress') {
+    $update = "UPDATE r_user_task SET status = 'progress' WHERE id_user = '$id_user' AND id_task = '$id_task'";
+    mysqli_query($conn, $update);
+}
 
 echo "<script>window.location = '../?page=project&&id=$id_project';</script>";

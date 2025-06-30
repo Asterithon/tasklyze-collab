@@ -28,8 +28,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     }
 
     echo "<script>
-        alert('Tanggapan berhasil dikirim!');
-        window.location = '../';
+        window.location = '../?page=project&&id=$id_project';;
     </script>";
 }
 ?>

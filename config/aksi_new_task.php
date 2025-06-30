@@ -8,7 +8,7 @@
     $result = mysqli_query($conn, $sql);
 
     if ($result) {
-        echo "<script>alert('Task succesfully created');
+        echo "<script>
         window.location = '../?page=project&&id=$id_project';</script>";
     } else {
     echo "<script>alert('Task Failed to create');

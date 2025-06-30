@@ -48,25 +48,26 @@ if ($checkAdmin && $adminRow = mysqli_fetch_assoc($checkAdmin)) {
           ?>
 
           <!-- Role Change Option (only if current user is admin) -->
-          <?php if ($isAdmin && $id_contributor != $id_user): ?>
-            <hr>
-            <h6 class="mb-2">Change Role</h6>
-            <input type="hidden" name="id_user" value="<?php echo $id_contributor; ?>">
-            <input type="hidden" name="id_project" value="<?php echo $id_project; ?>">
-            <div class="form-group">
-              <select name="new_role" class="form-control">
-                <option value="member" <?= $role === 'member' ? 'selected' : '' ?>>Member</option>
-                <option value="admin" <?= $role === 'admin' ? 'selected' : '' ?>>Admin</option>
-              </select>
-            </div>
-          <?php endif; ?>
+<?php if ($isAdmin && $id_contributor != $id_user): ?>
+  <hr>
+  <h6 class="mb-2">Change Role</h6>
+  <input type="hidden" name="id_user" value="<?php echo $id_contributor; ?>">
+  <input type="hidden" name="id_project" value="<?php echo $id_project; ?>">
+  <div class="form-group mb-3">
+    <select name="new_role" class="form-control">
+      <option value="member" <?= $role === 'member' ? 'selected' : '' ?>>Member</option>
+      <option value="admin" <?= $role === 'admin' ? 'selected' : '' ?>>Admin</option>
+    </select>
+  </div>
+<?php endif; ?>
         </div>
 
         <div class="modal-footer">
-          <?php if ($isAdmin && $id_contributor != $id_user): ?>
-            <button type="submit" class="btn btn-primary">Save Changes</button>
-          <?php endif; ?>
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <?php if ($isAdmin && $id_contributor != $id_user): ?>
+            <button type="submit" name="action" value="kick" class="btn btn-outline-danger" onclick="return confirm('Are you sure you want to remove this user from the project?')">Kick User</button>
+            <button type="submit" name="action" value="update" class="btn btn-primary">Save Changes</button>
+          <?php endif; ?>
         </div>
       </div>
     </form>
