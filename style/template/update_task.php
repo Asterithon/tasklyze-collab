@@ -2,7 +2,7 @@
     aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <form id="taskForm" class="modal-content" action="config/aksi_update_task.php?id=<?php echo $data['id_project'];?>"
-            method="post" novalidate>
+            method="post">
             <div class="modal-header">
                 <h5 class="modal-title" id="newTaskModalLabel">New Task</h5>
             </div>
