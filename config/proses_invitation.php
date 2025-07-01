@@ -2,9 +2,9 @@
 include '../inc/connec.php';
 session_start();
 
-if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    $id_invitation = $_POST['id_invitation'];
-    $action = $_POST['action']; // 'accepted' atau 'declined'
+if ($_SERVER["REQUEST_METHOD"] === "GET") {
+    $id_invitation = $_GET['id_invitation'];
+    $action = $_GET['action']; // 'accepted' atau 'declined'
     $now = date('Y-m-d H:i:s');
 
     if (in_array($action, ['accepted', 'declined'])) {
@@ -26,7 +26,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             mysqli_query($conn, $insert);
         }
     }
-
     echo "<script>
         window.location = '../?page=project&&id=$id_project';;
     </script>";
