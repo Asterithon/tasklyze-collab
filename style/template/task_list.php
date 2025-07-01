@@ -56,9 +56,9 @@ switch ($filter) {
     break;
 }
 
-$res = mysqli_query($conn, $sql);
+$res1 = mysqli_query($conn, $sql);
 $index = 0;
-if (mysqli_num_rows($res) === 0): ?>
+if (mysqli_num_rows($res1) === 0): ?>
   <div class="d-flex justify-content-center align-items-center text-center" style="height: 300px; width: 100%;">
     <div>
       <i class="fas fa-tasks fa-3x text-muted mb-3"></i>
@@ -70,7 +70,7 @@ if (mysqli_num_rows($res) === 0): ?>
   <div class="d-flex flex-wrap mt-4 row gap-3">
     <?php
     $no = 0;
-    while ($data = mysqli_fetch_array($res)) {
+    while ($data = mysqli_fetch_array($res1)) {
 
     $task_id = $data['id_task'];
     $taskdate = date('d M Y, H:i', strtotime($data['created_at']));
