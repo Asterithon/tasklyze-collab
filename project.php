@@ -28,6 +28,39 @@ if ($result_project && mysqli_num_rows($result_project) > 0) {
     $name_project = "Project Tidak Ditemukan";
     $desc_project = "Deskripsi tidak tersedia.";
 }
+
+$qTop = mysqli_query($conn, "
+  SELECT u.username, COUNT(*) AS completed
+  FROM r_user_task rut
+  JOIN task t ON rut.id_task = t.id_task
+  JOIN user u ON rut.id_user = u.id_user
+  WHERE t.id_project = '$id_project' AND rut.status = 'done'
+  GROUP BY rut.id_user
+  ORDER BY completed DESC
+  LIMIT 3
+");
+
+// Hitung total task yang diambil user ini di project ini
+$qTotal = mysqli_query($conn, "
+  SELECT COUNT(*) AS total 
+  FROM r_user_task rut
+  JOIN task t ON rut.id_task = t.id_task
+  WHERE rut.id_user = '$id_user' AND t.id_project = '$id_project'
+");
+$total = mysqli_fetch_assoc($qTotal)['total'] ?? 0;
+
+// Hitung task yang sudah selesai
+$qDone = mysqli_query($conn, "
+  SELECT COUNT(*) AS done 
+  FROM r_user_task rut
+  JOIN task t ON rut.id_task = t.id_task
+  WHERE rut.id_user = '$id_user' AND t.id_project = '$id_project' AND rut.status = 'done'
+");
+$done = mysqli_fetch_assoc($qDone)['done'] ?? 0;
+
+// Hitung persentase
+$percent = $total > 0 ? round(($done / $total) * 100) : 0;
+
 ?>
 
 <div class="content-wrapper kanban">
@@ -148,26 +181,48 @@ if ($result_project && mysqli_num_rows($result_project) > 0) {
 
                         </div>
                     </div>
-                    <div class="card card-primary card-outline">
-                        <div class="card-header">
-                            <h5 class="card-title">Stats</h5>
-                            <div class="card-tools">
-                                <a href="#" class="btn btn-tool">
-                                    <i class="fas fa-pen"></i>
-                                </a>
-                            </div>
-                        </div>
-                        <div class="card-body">
-                            <div class="custom-control custom-checkbox">
-                                <input class="custom-control-input" type="checkbox" id="customCheckbox1_1" disabled>
-                                <label for="customCheckbox1_1" class="custom-control-label">Bug Report</label>
-                            </div>
-                            <div class="custom-control custom-checkbox">
-                                <input class="custom-control-input" type="checkbox" id="customCheckbox1_2" disabled>
-                                <label for="customCheckbox1_2" class="custom-control-label">Feature Request</label>
-                            </div>
-                        </div>
-                    </div>
+<div class="card card-primary card-outline">
+  <div class="card-header">
+    <h5 class="card-title">Your Task Completion</h5>
+  </div>
+  <div class="card-body">
+    <div class="mb-3">
+      <label class="d-block text-muted">Progress</label>
+      <div class="progress">
+        <div class="progress-bar bg-success" style="width: <?= $percent ?>%;">
+          <?= $percent ?>%
+        </div>
+      </div>
+      <small class="text-muted"><?= $done ?> of <?= $total ?> tasks completed</small>
+    </div>
+
+<div>
+  <label class="d-block text-muted">Top Contributors</label>
+  <ul class="list-unstyled mb-0">
+    <?php
+    if (mysqli_num_rows($qTop) > 0) {
+      $rank = 1;
+      while ($top = mysqli_fetch_assoc($qTop)) {
+        $badge = match($rank) {
+          1 => 'badge-warning',
+          2 => 'badge-secondary',
+          3 => 'badge-info',
+          default => 'badge-light'
+        };
+        echo "<li>
+          <span class='badge $badge mr-2'>#{$rank}</span>
+          <strong>{$top['username']}</strong> – {$top['completed']} tasks
+        </li>";
+        $rank++;
+      }
+    } else {
+      echo "<li class='text-muted'>No contributors have completed any tasks yet.</li>";
+    }
+    ?>
+  </ul>
+</div>
+  </div>
+</div>
                 </div>
             </div>
 

@@ -53,24 +53,24 @@
               break;
             case 'task':
             case 'task update':
-              $redirectUrl = "?page=project&id=$id_related";
+              $redirectUrl = "?page=project&&id=$id_related";
               echo "
           <div class='text-center'>
             <a href='$redirectUrl' class='btn btn-primary'>🔍 View Detail</a>
           </div>";
               break;
             case 'comment':
-              $redirectUrl = "?page=project&id=$id_related";
+              $redirectUrl = "?page=project&&id=$id_related";
               break;
             case 'reminder':
-              $redirectUrl = "?page=project&id=$id_related";
+              $redirectUrl = "?page=project&&id=$id_related";
               echo "
           <div class='text-center'>
             <a href='$redirectUrl' class='btn btn-primary'>🔍 View Detail</a>
           </div>";
               break;
             case 'general':
-              $redirectUrl = "?page=notification&id=$id_related";
+              $redirectUrl = "?page=notification&&id=$id_related";
               break;
           }
 
