@@ -123,7 +123,7 @@ if (mysqli_num_rows($res1) === 0): ?>
         <div class="card card-outline card-primary text-truncate" style="cursor: pointer;" data-bs-toggle="modal"
           data-bs-target="#taskDetail<?php echo $task_id; ?>">
           <div class="card-header p-2">
-            <h6 class="card-title text-truncate d-inline-block w-100 mb-0"><?php echo "$no. " . $data['name_task']; ?></h6>
+            <h6 class="card-title text-truncate d-inline-block w-100 mb-0"><?php echo $data['name_task']; ?></h6>
           </div>
           <div class="card-body p-2">
             <p class="small text-truncate mb-1"><?php echo $data['desc_task']; ?></p>
