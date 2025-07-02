@@ -17,18 +17,21 @@
             if ($invitationStatus === 'pending') {
               ?>
               <div class='text-center'>
-                <form method='post' action='config/proses_invitation.php' class='d-inline'>
+                <!-- <form method='post' action='config/proses_invitation.php' class='d-inline'>
                   <input type='hidden' name='id_invitation' value='$id_related'>
                   <input type='hidden' name='action' value='accepted'>
                   <button type='submit' class='btn btn-success mr-2'>✅ Accept</button>
-                </form>
-                <a href="config/proses_invitation.php?id_invitation=<?php echo $id_related ?>&&action=accepted">✅ Accept</a>
-                <form method='post' action='config/proses_invitation.php' class='d-inline'>
+                </form> -->
+                <a href="config/proses_invitation.php?id_invitation=<?php echo $id_related ?>&&action=accepted"
+                  class='btn btn-success mr-2'>✅ Accept</a>
+                <a href="config/proses_invitation.php?id_invitation=<?php echo $id_related ?>&&action=declined"
+                  class='btn btn-danger mr-2'>❌ Decline</a>
+                <!-- <form method='post' action='config/proses_invitation.php' class='d-inline'>
                   <input type='hidden' name='id_invitation' value='$id_related'>
                   <input type='hidden' name='action' value='declined'>
                   <button type='submit' class='btn btn-danger'>❌ Decline</button>
-                </form>
-              </div>";
+                </form> -->
+              </div>
             <?php } else {
               echo "
               <div class='text-center mt-3'>
