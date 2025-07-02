@@ -41,10 +41,10 @@
               </div>";
             }
           }
-        } elseif ($id_related && in_array($table_related, ['project', 'task', 'comment', 'reminder', 'general', 'task update'])) {
+        } elseif ($id_related && in_array($type, ['project', 'task', 'comment', 'reminder', 'general', 'task update'])) {
           // Tentukan URL tujuan berdasarkan table_related
           $redirectUrl = '#';
-          switch ($table_related) {
+          switch ($type) {
             case 'project':
               echo "
           <div class='text-center'>
@@ -53,24 +53,24 @@
               break;
             case 'task':
             case 'task update':
-              $redirectUrl = "../?page=project&task=$id_related";
+              $redirectUrl = "?page=project&id=$id_related";
               echo "
           <div class='text-center'>
             <a href='$redirectUrl' class='btn btn-primary'>🔍 View Detail</a>
           </div>";
               break;
             case 'comment':
-              $redirectUrl = "../?page=project&comment=$id_related";
+              $redirectUrl = "?page=project&id=$id_related";
               break;
             case 'reminder':
-              $redirectUrl = "../?page=reminder&id=$id_related";
+              $redirectUrl = "?page=project&id=$id_related";
               echo "
           <div class='text-center'>
             <a href='$redirectUrl' class='btn btn-primary'>🔍 View Detail</a>
           </div>";
               break;
             case 'general':
-              $redirectUrl = "../?page=notification&id=$id_related";
+              $redirectUrl = "?page=notification&id=$id_related";
               break;
           }
 

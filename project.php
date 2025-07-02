@@ -1,7 +1,24 @@
 <?php
-$id_project = $_GET['id'];
+include 'inc/connec.php';
+$id_project = $_GET['id']  ?? null;
 $sql_project = "SELECT name_project, desc_project FROM project WHERE id_project = '$id_project'";
 $result_project = mysqli_query($conn, $sql_project);
+$id_user = $_SESSION['id_user'];
+
+if (!$id_project) {
+  // Tidak ada ID project
+echo "<script>window.location.href = '?page=dashboard';</script>";
+exit;
+}
+
+// Cek apakah user terdaftar di project ini
+$q = mysqli_query($conn, "SELECT 1 FROM r_user_project WHERE id_user = '$id_user' AND id_project = '$id_project'");
+if (mysqli_num_rows($q) === 0) {
+  // User tidak punya akses ke project ini
+echo "<script>window.location.href = '?page=dashboard';</script>";
+exit;
+}
+
 
 if ($result_project && mysqli_num_rows($result_project) > 0) {
     $row_project = mysqli_fetch_assoc($result_project);
