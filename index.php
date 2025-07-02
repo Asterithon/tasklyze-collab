@@ -51,13 +51,13 @@ session_start();
   <div class="wrapper">
 
     <!-- Preloader -->
-    <div class="preloader flex-column justify-content-center align-items-center">
+    <!-- <div class="preloader flex-column justify-content-center align-items-center">
         <img src="asset/img/logo_1.webp" class="img-thumbnail mb-4 border border-0" alt="Logo" style="width: 100px; height: auto;">
   <div class="text-center flex-column justify-content-center">
     <div class="spinner-border text-primary mr-3" role="status"></div>
     <p class="h4 text-primary">Please Wait...</p>
   </div>
-    </div>
+    </div> -->
 
 
     <!-- Navbar -->

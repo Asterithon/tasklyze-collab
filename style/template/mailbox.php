@@ -23,9 +23,9 @@
           <div class="col-md-3">
             <a href="" class="btn btn-primary btn-block mb-3">refresh</a>
 
-            <div class="card">
-              <div class="card-header">
-                <h3 class="card-title">Folders</h3>
+            <div class="card " >
+              <div class="card-header"data-card-widget="collapse">
+                <h3 class="card-title fw-bold">Folders</h3>
 
                 <div class="card-tools">
                   <button type="button" class="btn btn-tool" data-card-widget="collapse">
@@ -35,31 +35,89 @@
               </div>
               <div class="card-body p-0">
                 <ul class="nav nav-pills flex-column">
-                  <li class="nav-item active">
-                    <a href="#" class="nav-link">
-                      <i class="fas fa-inbox"></i> Inbox
-                      <?php
-                      $id_user = $_SESSION['id_user'];
-                      $q_read = mysqli_query($conn, "SELECT COUNT(*) AS total_read FROM notification WHERE id_user = '$id_user' AND is_read = 0");
-                      $data_read = mysqli_fetch_assoc($q_read);
-                      $total_read = $data_read['total_read'];
-                      if ($total_read > 0): ?>
-                        <span id="badge-read-count" class="badge bg-primary float-right"><?= $total_read ?></span>
-                      <?php endif; ?>
-                    </a>
-                  </li>
-                  <li class="nav-item">
-                    <a href="#" class="nav-link">
-                      <i class="far fa-file-alt"></i> Invitations
-                    </a>
-                  </li>
-                  <li class="nav-item">
-                    <a href="#" class="nav-link">
-                      <i class="fas fa-filter"></i> Recent
-                      <span class="badge bg-warning float-right">65</span>
-                    </a>
-                  </li>
-                </ul>
+<?php
+$id_user = $_SESSION['id_user'];
+
+// Ambil total notifikasi belum dibaca per type
+$qNotif = mysqli_query($conn, "
+  SELECT type, COUNT(*) AS total 
+  FROM notification 
+  WHERE id_user = '$id_user' 
+  GROUP BY type
+");
+
+$notifCounts = [
+  'all' => 0,
+  'task' => 0,
+  'task update' => 0,
+  'invitation' => 0,
+  'project' => 0,
+  'reminder' => 0
+];
+
+while ($row = mysqli_fetch_assoc($qNotif)) {
+  $type = strtolower($row['type']);
+  $count = (int)$row['total'];
+  if (isset($notifCounts[$type])) {
+    $notifCounts[$type] = $count;
+  }
+  $notifCounts['all'] += $count;
+}$activeType = $_GET['type'] ?? 'all';
+?>
+
+<li class="nav-item">
+  <a href="?page=mailbox&type=all" class="nav-link <?= $activeType === 'all' ? 'active bg-primary bg-gradient' : '' ?>">
+    <i class="fas fa-inbox"></i> All
+    <?php if ($notifCounts['all'] > 0): ?>
+      <span class=" float-right"><?= $notifCounts['all'] ?></span>
+    <?php endif; ?>
+  </a>
+</li>
+
+<li class="nav-item">
+  <a href="?page=mailbox&type=task" class="nav-link <?= $activeType === 'task' ? 'active' : '' ?>">
+    <i class="fas fa-tasks"></i> Task
+    <?php if ($notifCounts['task'] > 0): ?>
+      <span class=" float-right"><?= $notifCounts['task'] ?></span>
+    <?php endif; ?>
+  </a>
+</li>
+
+<li class="nav-item">
+  <a href="?page=mailbox&type=task update" class="nav-link <?= $activeType === 'task update' ? 'active' : '' ?>">
+    <i class="fas fa-sync-alt"></i> Task Update
+    <?php if ($notifCounts['task update'] > 0): ?>
+      <span class=" float-right"><?= $notifCounts['task update'] ?></span>
+    <?php endif; ?>
+  </a>
+</li>
+
+<li class="nav-item">
+  <a href="?page=mailbox&type=invitation" class="nav-link <?= $activeType === 'invitation' ? 'active' : '' ?>">
+    <i class="far fa-file-alt"></i> Invitation
+    <?php if ($notifCounts['invitation'] > 0): ?>
+      <span class=" float-right"><?= $notifCounts['invitation'] ?></span>
+    <?php endif; ?>
+  </a>
+</li>
+
+<li class="nav-item">
+  <a href="?page=mailbox&type=project" class="nav-link <?= $activeType === 'project' ? 'active' : '' ?>">
+    <i class="fas fa-folder-open"></i> Project
+    <?php if ($notifCounts['project'] > 0): ?>
+      <span class=" float-right"><?= $notifCounts['project'] ?></span>
+    <?php endif; ?>
+  </a>
+</li>
+
+<li class="nav-item">
+  <a href="?page=mailbox&type=reminder" class="nav-link <?= $activeType === 'reminder' ? 'active' : '' ?>">
+    <i class="fas fa-bell"></i> Reminder
+    <?php if ($notifCounts['reminder'] > 0): ?>
+      <span class=" float-right"><?= $notifCounts['reminder'] ?></span>
+    <?php endif; ?>
+  </a>
+</li>                </ul>
               </div>
               <!-- /.card-body -->
             </div>
@@ -87,32 +145,51 @@
                       <i class="fas fa-envelope-open-text"></i> Read All
                     </button>
                   </div>
-                  <form method="GET" class="d-flex">
-                    <input type="hidden" name="page" value="mailbox">
-                    <input type="text" name="search" class="form-control form-control-sm" placeholder="Search Mail" value="<?= htmlspecialchars($_GET['search'] ?? '') ?>">
-                    <button type="submit" class="btn btn-primary btn-sm ms-1"><i class="fas fa-search"></i></button>
-                  </form>
+<form method="GET" class="d-flex">
+  <input type="hidden" name="page" value="mailbox">
+  <input type="hidden" name="type" value="<?= htmlspecialchars($_GET['type'] ?? 'all') ?>">
+  <input type="text" name="search" class="form-control form-control-sm" placeholder="Search Mail" value="<?= htmlspecialchars($_GET['search'] ?? '') ?>">
+  <button type="submit" class="btn btn-primary btn-sm ms-1">
+    <i class="fas fa-search"></i>
+  </button>
+</form>
                 </div>
                 <form method="POST" action="config/aksi_notifikasi_massal.php" id="notifForm">
                   <div class="table-responsive mailbox-messages overflow-auto">
                     <table class="table table-hover table-striped">
                       <tbody>
-                        <?php
-                        $id_user = $_SESSION["id_user"];
-                        $search = $_GET['search'] ?? '';
-                        $searchSql = $search ? "AND message LIKE '%" . mysqli_real_escape_string($conn, $search) . "%'" : '';
-                        $sql = "SELECT * FROM notification WHERE id_user = '$id_user' $searchSql ORDER BY created_at DESC";
-                        $result = mysqli_query($conn, $sql);
+<?php
+$id_user = $_SESSION["id_user"];
+$search = $_GET['search'] ?? '';
+$type = $_GET['type'] ?? 'all';
 
-                        if (mysqli_num_rows($result) > 0) {
-                          while ($row = mysqli_fetch_assoc($result)) {
-                            $notif_id = $row['id'];
-                            $pesan = $row['message'];
-                            $tanggal = date('d M Y, H:i', strtotime($row['created_at']));
-                            $type = $row['type'];
-                            $id_related = $row['id_related'];
-                            $table_related = $row['table_related'];
+// Filter pencarian
+$searchSql = $search ? "AND message LIKE '%" . mysqli_real_escape_string($conn, $search) . "%'" : '';
 
+// Filter tipe notifikasi
+$typeSql = ($type !== 'all') ? "AND type = '" . mysqli_real_escape_string($conn, $type) . "'" : '';
+
+// Gabungkan query
+$sql = "
+  SELECT * FROM notification 
+  WHERE id_user = '$id_user' 
+  $typeSql 
+  $searchSql 
+  ORDER BY created_at DESC
+";
+
+$result = mysqli_query($conn, $sql);
+
+if (mysqli_num_rows($result) > 0) {
+  while ($row = mysqli_fetch_assoc($result)) {
+    $notif_id = $row['id'];
+    $pesan = $row['message'];
+    $tanggal = date('d M Y, H:i', strtotime($row['created_at']));
+    $type = $row['type'];
+    $id_related = $row['id_related'];
+    $table_related = $row['table_related'];
+
+    // Tampilkan notifikasi seperti biasa
 
                             echo "
     <tr>
@@ -151,6 +228,7 @@
               </div>
             </div>";
                         }
+
                         ?>
                       </tbody>
                     </table>
@@ -159,21 +237,6 @@
                 <!-- /.mail-box-messages -->
               </div>
               <!-- /.card-body -->
-              <div class="card-footer p-0">
-                <div class="mailbox-controls d-flex justify-content-between align-items-center px-2">
-                  <div>
-                    <button type="button" class="btn btn-default btn-sm checkbox-toggle">
-                      <i class="far fa-square"></i>
-                    </button>
-                    <button type="button" class="btn btn-default btn-sm" id="btnDeleteSelected" data-bs-toggle="modal" data-bs-target="#modalConfirmDelete">
-                      <i class="far fa-trash-alt"></i>
-                    </button>
-                    <button type="button" class="btn btn-default btn-sm" data-bs-toggle="modal" data-bs-target="#modalReadAll">
-                      <i class="fas fa-envelope-open-text"></i> Read All
-                    </button>
-                  </div>
-                </div>
-              </div>
             </div>
             <!-- /.card -->
           </div>

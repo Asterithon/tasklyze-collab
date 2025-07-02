@@ -61,6 +61,13 @@ $done = mysqli_fetch_assoc($qDone)['done'] ?? 0;
 // Hitung persentase
 $percent = $total > 0 ? round(($done / $total) * 100) : 0;
 
+$qRole = mysqli_query($conn, "
+  SELECT role FROM r_user_project 
+  WHERE id_user = '$id_user' AND id_project = '$id_project'
+");
+$dataRole = mysqli_fetch_assoc($qRole);
+$isAdmin = isset($dataRole['role']) && $dataRole['role'] === 'admin';
+
 ?>
 
 <div class="content-wrapper kanban">
@@ -88,12 +95,12 @@ $percent = $total > 0 ? round(($done / $total) * 100) : 0;
                         <div class="card-header">
                             <h5 class="card-title"><?= $name_project ?></h5>
                             <div class="card-tools">
-
-                                <a href="#" class="btn btn-tool" data-bs-toggle="modal"
-                                    data-bs-target="#projectEdit<?php echo $id_project; ?>">
-
-                                    <i class="fas fa-pen"></i>
-                                </a>
+<?php if ($isAdmin): ?>
+  <a href="#" class="btn btn-tool" data-bs-toggle="modal"
+     data-bs-target="#projectEdit<?php echo $id_project; ?>">
+    <i class="fas fa-pen"></i>
+  </a>
+<?php endif; ?>
                             </div>
                         </div><?php include "style/template/edit_project.php"; ?>
                         <div class="card-body">
@@ -229,7 +236,7 @@ $percent = $total > 0 ? round(($done / $total) * 100) : 0;
             <div class="card card-row card-primary" style="min-width: 75%;">
                 <div class="card-header">
                     <h3 class="card-title">
-                        To Do
+                        Tasks
                     </h3>
                 </div>
                 <div class="card-body">
