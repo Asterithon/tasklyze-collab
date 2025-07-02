@@ -52,6 +52,7 @@ if ($totalUser == 0) {
   }
 
   // Hapus semua data terkait project
+mysqli_query($conn, "DELETE FROM invitation WHERE id_project = '$id_project'");
   mysqli_query($conn, "DELETE FROM task WHERE id_project = '$id_project'");
   mysqli_query($conn, "DELETE FROM notification WHERE table_related = 'project' AND id_related = '$id_project'");
   mysqli_query($conn, "DELETE FROM project WHERE id_project = '$id_project'");
