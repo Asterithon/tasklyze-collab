@@ -113,22 +113,32 @@
               $id_related = $row['id_related'];
               $table_related = $row['table_related'];
 
-              echo "
-  <tr>
-    <td onclick='event.stopPropagation();'>
-      <div class='icheck-primary'>
-        <input type='checkbox' name='selected_notif[]' value='$notif_id' id='check$notif_id'>
-        <label for='check$notif_id'></label>
-      </div>
-    </td>
-    <td colspan='5' class='notif-row' data-toggle='modal' data-target='#notif$notif_id'>
-      <div class='d-flex'>
-        <div class='mailbox-name mr-3'><a href='#'>$type</a></div>
-        <div class='mailbox-subject flex-grow-1'>- $pesan</div>
-        <div class='mailbox-date text-nowrap'>$tanggal</div>
-      </div>
-    </td>
-  </tr>";
+
+    echo "
+    <tr>
+      <td onclick='event.stopPropagation();'>
+        <div class='icheck-primary'>
+          <input type='checkbox' name='selected_notif[]' value='$notif_id' id='check$notif_id'>
+          <label for='check$notif_id'></label>
+        </div>
+      </td>
+      <td colspan='5' class='notif-row'
+          data-id='$notif_id'
+          data-type='$type'
+          data-message='" . htmlspecialchars($pesan, ENT_QUOTES) . "'
+          data-date='$tanggal'
+          data-idrelated='$id_related'
+          data-tablerelated='$table_related'
+          data-toggle='modal'
+          data-target='#notif$notif_id'>
+        <div class='d-flex'>
+          <div class='mailbox-name mr-3'><a href='#'>$type</a></div>
+          <div class='mailbox-subject flex-grow-1'>- $pesan</div>
+          <div class='mailbox-date text-nowrap'>$tanggal</div>
+        </div>
+      </td>
+    </tr>";
+
               include "style/template/modal_mailbox.php";
             }
           } else {
@@ -180,7 +190,8 @@
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title">Mark All as Read</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+
           </div>
           <div class="modal-body">
             <p>Are you sure you want to mark all your notifications as <strong>read</strong>?</p>
@@ -202,7 +213,7 @@
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title">Confirm Deletion</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
           </div>
           <div class="modal-body">
             <p id="deleteMessage">?</p>
@@ -227,25 +238,26 @@
       });
     });
 
-    document.querySelectorAll('.notif-row').forEach(row => {
-      row.addEventListener('click', function () {
-        const notifId = this.dataset.id;
+document.querySelectorAll('.notif-row').forEach(row => {
+  row.addEventListener('click', function () {
+    const notifId = this.dataset.id;
 
-        // Kirim AJAX untuk tandai sebagai dibaca dan ambil jumlah baru
-        fetch(`config/mark_read.php?id=${notifId}`)
-          .then(response => response.text())
-          .then(count => {
-            document.getElementById('badge-read-count').textContent = count;
-          });
+    // Kirim AJAX untuk tandai sebagai dibaca dan ambil jumlah baru
+    fetch(`config/mark_read.php?id=${notifId}`)
+      .then(response => response.text())
+      .then(count => {
+        const badge = document.getElementById('badge-read-count');
+        if (badge) {
+          if (parseInt(count) > 0) {
+            badge.textContent = count;
+            badge.style.display = 'inline-block';
+          } else {
+            badge.style.display = 'none';
+          }
+        }
       });
-    });
-
-    document.querySelectorAll('.notif-row').forEach(row => {
-      row.addEventListener('click', function () {
-        const notifId = this.dataset.id;
-        fetch(`config/mark_read.php?id=${notifId}`);
-      });
-    });
+  });
+});
 
 
     document.getElementById('btnDeleteSelected').addEventListener('click', function () {

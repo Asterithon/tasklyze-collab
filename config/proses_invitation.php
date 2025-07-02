@@ -24,8 +24,16 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
             // Masukkan user ke tabel project
             $insert = "INSERT INTO r_user_project (id_user, id_project, role) VALUES ('$id_user', '$id_project', 'member')";
             mysqli_query($conn, $insert);
+                echo "<script>
+        window.location = '../?page=project&&id=$id_project';
+    </script>";
+        } else{
+                echo "<script>
+        window.location = '../?page=mailbox';
+    </script>";
         }
     }
+
     echo "<script>
         window.location = '../?page=project&&id=$id_project';;
     </script>";

@@ -60,11 +60,16 @@ switch ($filter) {
 
   case 'done':
     $sql = "SELECT t.* FROM task t
-            WHERE t.id_project = $f_id_project
-            AND NOT EXISTS (
-              SELECT 1 FROM r_user_task r
-              WHERE r.id_task = t.id_task AND r.status != 'done'
-            )";
+WHERE t.id_project = $f_id_project
+AND EXISTS (
+  SELECT 1 FROM r_user_task r
+  WHERE r.id_task = t.id_task
+)
+AND NOT EXISTS (
+  SELECT 1 FROM r_user_task r
+  WHERE r.id_task = t.id_task AND r.status != 'done'
+)
+            ";
     break;
 
   case 'yours':
@@ -85,9 +90,9 @@ switch ($filter) {
     break;
 }
 
-$res = mysqli_query($conn, $sql);
+$res1 = mysqli_query($conn, $sql);
 $index = 0;
-if (mysqli_num_rows($res) === 0): ?>
+if (mysqli_num_rows($res1) === 0): ?>
   <div class="d-flex justify-content-center align-items-center text-center" style="height: 300px; width: 100%;">
     <div>
       <i class="fas fa-tasks fa-3x text-muted mb-3"></i>
@@ -100,12 +105,11 @@ if (mysqli_num_rows($res) === 0): ?>
 <?php else: ?>
   <div class="d-flex flex-wrap mt-4 row gap-3">
     <?php
-    $no = 0;
-    while ($data = mysqli_fetch_array($res)) {
+
+    while ($data = mysqli_fetch_array($res1)) {
 
       $task_id = $data['id_task'];
       $taskdate = date('d M Y, H:i', strtotime($data['created_at']));
-      $no++;
 
       // Hitung total contributor
       $q_total = mysqli_query($conn, "SELECT COUNT(*) AS total FROM r_user_task WHERE id_task = '$task_id'");
@@ -119,7 +123,7 @@ if (mysqli_num_rows($res) === 0): ?>
         <div class="card card-outline card-primary text-truncate" style="cursor: pointer;" data-bs-toggle="modal"
           data-bs-target="#taskDetail<?php echo $task_id; ?>">
           <div class="card-header p-2">
-            <h6 class="card-title text-truncate mb-0"><?php echo "$no. " . $data['name_task']; ?></h6>
+            <h6 class="card-title text-truncate mb-0"><?php echo $data['name_task']; ?></h6>
           </div>
           <div class="card-body p-2">
             <p class="small text-truncate mb-1"><?php echo $data['desc_task']; ?></p>
