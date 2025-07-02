@@ -1,5 +1,5 @@
-<div class="content-wrapper">
-  <section class="content">
+<div class="content-wrapper d-flex align-items-center justify-content-center min-vh-100">
+  <section class="content w-100">
     <div class="container-fluid">
       <div class="container mb-5">
         <div class="card shadow-sm">

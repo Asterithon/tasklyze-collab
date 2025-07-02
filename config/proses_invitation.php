@@ -6,7 +6,6 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
     $id_invitation = $_GET['id_invitation'];
     $action = $_GET['action']; // 'accepted' atau 'declined'
     $now = date('Y-m-d H:i:s');
-
     if (in_array($action, ['accepted', 'declined'])) {
         // Update status invitation
         $update = "UPDATE invitation SET status = '$action', created_at = '$now' WHERE id = '$id_invitation'";
