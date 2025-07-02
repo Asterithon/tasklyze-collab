@@ -28,7 +28,7 @@ $message = "You have been assigned to a task: <strong>$task_name</strong><br>Pro
 $insertNotif = "INSERT INTO notification 
   (id_user, id_actor, type, message, id_related, table_related, is_read) 
   VALUES 
-  ('$id_user', '$id_actor', 'reminder', '$message', '$id_task', 'task', 0)";
+  ('$id_user', '$id_actor', 'reminder', '$message', '$id_project', 'project', 0)";
 mysqli_query($conn, $insertNotif);
 
 // Redirect

@@ -5,6 +5,7 @@ $description = $_POST["taskDescription"];
 $id_task = $_POST['id_task'];
 $id_project = $_GET['id'];
 
+
 $sql = "UPDATE task SET name_task = '$title', desc_task = '$description' WHERE id_task = '$id_task'";
 $result = mysqli_query($conn, $sql);
 

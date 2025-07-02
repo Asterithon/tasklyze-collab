@@ -30,6 +30,7 @@
   <!-- Brand Logo -->
   <a href="index.php" class="brand-link">
     <!-- Note: Untuk dimasukan logo dari asset/img/logo_white_2.webp kesini  -->
+    <img src="asset/img/logo_white_1.webp" alt="Tasklyze Logo" class="brand-image" >
     <span class="brand-text font-weight-bold text-center">Tasklyze</span>
   </a>
 
@@ -67,7 +68,7 @@ $currentPage = $_GET['page'] ?? '';
         <!-- Dashboard, Took me a while to figure out >x<, 
          Note to everyone: blom ada kondisi ketika highlight aktif -->
         <li class="nav-item">
-            <a href="?page=dashboard" class="nav-link">
+            <a href="?page=dashboard" class="nav-link <?= ($currentPage === '' or $currentPage === 'dashboard') ? 'active' : ''; ?>">
               <i class="nav-icon fas fa-home"></i>
               <p>
                 Dashboard
@@ -85,28 +86,32 @@ $currentPage = $_GET['page'] ?? '';
           </a>
           <ul class="nav nav-treeview">
 
-            <?php
-            $sql = "SELECT * FROM r_user_project
-        LEFT JOIN user ON r_user_project.id_user = user.id_user 
-        LEFT JOIN project ON r_user_project.id_project = project.id_project 
-        WHERE user.id_user = '" . $_SESSION['id_user'] . "'";
-            $res = mysqli_query($conn, $sql);
-            // Cek apakah ada data yang ditemukan
-            if (mysqli_num_rows($res) > 0) {
-              while ($data = mysqli_fetch_array($res)) { ?>
-                <li class="nav-item">
-                  <a href="index.php?page=project&&id=<?php echo $data['id_project']; ?>" class="nav-link">
-                    <i class="far fa-circle nav-icon"></i>
-                    <p><?php echo $data['name_project']; ?></p>
-                  </a>
-                </li>
-              <?php }
-            } else {
-              echo '<p class="pb-1 text-center text-warning fw-bold">You don\'t have any project yet!</p>';
-            }
-            ?>
+<?php
+$sql = "SELECT * FROM r_user_project 
+  LEFT JOIN user ON r_user_project.id_user = user.id_user 
+  LEFT JOIN project ON r_user_project.id_project = project.id_project 
+  WHERE user.id_user = '" . $_SESSION['id_user'] . "'";
+$res = mysqli_query($conn, $sql);
+
+$currentProjectId = $_GET['id'] ?? null;
+
+if (mysqli_num_rows($res) > 0) {
+  while ($data = mysqli_fetch_array($res)) {
+    $isActive = ($currentProjectId == $data['id_project']) ? 'active' : '';
+    ?>
+    <li class="nav-item">
+      <a href="index.php?page=project&&id=<?php echo $data['id_project']; ?>" class="pl-4 nav-link overflow-hidden <?= $isActive ?>">
+        <i class="far fa-circle nav-icon"></i>
+        <p class="p fs-5 text-truncate mb-0"><?php echo $data['name_project']; ?></p>
+      </a>
+    </li>
+  <?php }
+} else {
+  echo '<p class="pb-1 text-center text-warning fw-bold">You don\'t have any project yet!</p>';
+}
+?>
             <li class="nav-item">
-              <a class="nav-link" href="?page=new_project">
+              <a class="nav-link <?= ($currentPage === 'new_project') ? 'active' : ''; ?>" href="?page=new_project ">
                 <i class="far fa-plus nav-icon"></i>
                 <p>Create New Project</p>
               </a>
@@ -114,7 +119,7 @@ $currentPage = $_GET['page'] ?? '';
           </ul>
         </li>
         <li class="nav-item">
-          <a href="?page=mailbox" class="nav-link">
+          <a href="?page=mailbox" class="nav-link <?= ($currentPage === 'mailbox') ? 'active' : ''; ?>">
             <i class="nav-icon far fa-envelope"></i>
             <p>
               Mailbox

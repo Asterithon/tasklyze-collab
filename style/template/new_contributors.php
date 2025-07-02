@@ -16,26 +16,39 @@
                     <div class="col-md-6 border-right pr-3" style="max-height: 33vh; overflow-y: auto;">
                             <h6 class="text-success mb-3">⏳ Pending Invitations</h6>
 
-                            <?php
-                            $sqlPending = "SELECT i.id_receiver, u.username
-                   FROM invitation i
-                   JOIN user u ON i.id_receiver = u.id_user
-                   WHERE i.id_project = '$id_project' AND i.status = 'pending'";
-                            $resPending = mysqli_query($conn, $sqlPending);
+                            <div class="table-responsive mt-4">
+    <table class="table table-hover mb-0">
+        <tbody>
+            <?php
+            $sqlPending = "SELECT i.id_receiver, u.username, u.email
+                           FROM invitation i
+                           JOIN user u ON i.id_receiver = u.id_user
+                           WHERE i.id_project = '$id_project' AND i.status = 'pending'";
+            $resPending = mysqli_query($conn, $sqlPending);
 
-                            if (mysqli_num_rows($resPending) > 0) {
-                                while ($row = mysqli_fetch_assoc($resPending)) {
-                                    $nama = $row['username'];
-                                    echo "
-            <div class='d-flex justify-content-between align-items-center mb-2'>
-                <div class='text-truncate'><i class='fas fa-user-clock text-secondary mr-2'></i> $nama</div>
-                <div><span class='badge badge-warning'>invited</span></div>
-            </div>";
-                                }
-                            } else {
-                                echo "<p class='text-muted'>Tidak ada undangan pending saat ini.</p>";
-                            }
-                            ?>
+            if (mysqli_num_rows($resPending) > 0) {
+                while ($row = mysqli_fetch_assoc($resPending)) {
+                    $nama = $row['username'];
+                    $email = $row['email'];
+
+                    echo "
+                    <tr>
+                        <td>
+                            <div class='font-weight-bold mb-1'>$nama</div>
+                            <div class='text-muted small'>$email</div>
+                        </td>
+                        <td class='text-right align-middle'>
+                            <span class='badge badge-warning' style='min-width: 80px;'>invited</span>
+                        </td>
+                    </tr>";
+                }
+            } else {
+                echo "<tr><td colspan='2' class='text-muted text-center'>Tidak ada undangan pending saat ini.</td></tr>";
+            }
+            ?>
+        </tbody>
+    </table>
+</div>
                     </div>
 
                     <!-- Tambahkan Kontributor Baru -->
@@ -48,31 +61,45 @@
                         </div>
                         <form method="POST" action="config/aksi_invite.php?id=<?= $_GET['id'] ?>">
 
-<?php
-// Ambil user yang belum tergabung dan belum memiliki undangan accepted/pending
-$sqlNew = "SELECT id_user, username FROM user 
-           WHERE id_user NOT IN (
-               SELECT id_user FROM r_user_project WHERE id_project = '$id_project'
-           )
-           AND id_user NOT IN (
-               SELECT id_receiver FROM invitation 
-               WHERE id_project = '$id_project' AND status IN ('pending', 'accepted')
-           )";
-$resNew = mysqli_query($conn, $sqlNew);
+<div class="table-responsive mt-4">
+    <table class="table table-hover mb-0">
+        <tbody>
+            <?php
+            $sqlNew = "SELECT u.id_user, u.username, u.email
+                       FROM user u
+                       WHERE u.id_user NOT IN (
+                         SELECT id_user FROM r_user_project WHERE id_project = '$id_project'
+                       )
+                       AND u.id_user NOT IN (
+                         SELECT id_receiver FROM invitation
+                         WHERE id_project = '$id_project' AND status = 'pending'
+                       )";
+            $resNew = mysqli_query($conn, $sqlNew);
 
-if (mysqli_num_rows($resNew) > 0) {
-    while ($u = mysqli_fetch_assoc($resNew)) {
-        echo "
-        <div class='form-check mb-2 user-item'>
-            <input class='form-check-input' type='checkbox' name='invite_users[]' value='{$u['id_user']}' id='user{$u['id_user']}'>
-            <label class='form-check-label' for='user{$u['id_user']}'>{$u['username']}</label>
-        </div>";
-    }
-} else {
-    echo "<p class='text-muted'>Semua user telah bergabung atau sedang menunggu respon undangan.</p>";
-}
-?>
-                    </div>
+            if (mysqli_num_rows($resNew) > 0) {
+                while ($u = mysqli_fetch_assoc($resNew)) {
+                    $id = $u['id_user'];
+                    $username = $u['username'];
+                    $email = $u['email'];
+
+                    echo "
+                    <tr class='user-row' style='cursor: pointer;' data-id='user$id'>
+                        <td>
+                            <div class='font-weight-bold mb-1'>$username</div>
+                            <div class='text-muted small'>$email</div>
+                        </td>
+                        <td class='text-right align-middle'>
+                            <input type='checkbox' name='invite_users[]' value='$id' id='user$id' class='form-check-input'>
+                        </td>
+                    </tr>";
+                }
+            } else {
+                echo "<tr><td colspan='2' class='text-muted text-center'>Semua user telah bergabung atau sedang menunggu respon undangan.</td></tr>";
+            }
+            ?>
+        </tbody>
+    </table>
+</div>                    </div>
                 </div>
             </div>
             <div class="modal-footer justify-content-between">
@@ -90,17 +117,43 @@ if (mysqli_num_rows($resNew) > 0) {
 
 
 <script>
-    document.getElementById("searchUser").addEventListener("input", function() {
-        const filter = this.value.toLowerCase();
-        document.querySelectorAll(".user-item").forEach(item => {
-            const name = item.textContent.toLowerCase();
-            item.style.display = name.includes(filter) ? "" : "none";
-        });
+document.addEventListener('DOMContentLoaded', function () {
+  // 🔍 Filter user berdasarkan input pencarian
+  document.getElementById("searchUser").addEventListener("input", function () {
+    const filter = this.value.toLowerCase();
+    document.querySelectorAll(".user-row").forEach(row => {
+      const text = row.textContent.toLowerCase();
+      row.style.display = text.includes(filter) ? "" : "none";
     });
-    document.querySelectorAll("input[name='invite_users[]']").forEach(checkbox => {
-        checkbox.addEventListener("change", function() {
-            const isChecked = Array.from(document.querySelectorAll("input[name='invite_users[]']")).some(c => c.checked);
-            document.getElementById("btnUndang").disabled = !isChecked;
-        });
+  });
+
+  // ✅ Toggle checkbox saat baris diklik (kecuali klik langsung pada checkbox)
+  document.querySelectorAll(".user-row").forEach(row => {
+    row.addEventListener("click", function (e) {
+      if (e.target.tagName.toLowerCase() === 'input') return;
+      const checkboxId = this.dataset.id;
+      const checkbox = document.getElementById(checkboxId);
+      if (checkbox) {
+        checkbox.checked = !checkbox.checked;
+        checkbox.dispatchEvent(new Event('change')); // trigger update tombol
+      }
     });
+  });
+
+  // 🔘 Aktifkan tombol "Undang" jika ada yang dicentang
+  const checkboxes = document.querySelectorAll("input[name='invite_users[]']");
+  const btnUndang = document.getElementById("btnUndang");
+
+  function updateButtonState() {
+    const isChecked = Array.from(checkboxes).some(cb => cb.checked);
+    btnUndang.disabled = !isChecked;
+  }
+
+  checkboxes.forEach(cb => {
+    cb.addEventListener("change", updateButtonState);
+  });
+
+  // Inisialisasi awal
+  updateButtonState();
+});
 </script>
