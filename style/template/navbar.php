@@ -23,8 +23,6 @@
 </nav>
 <!-- /.navbar -->
 
-
-
 <!-- Main Sidebar Container -->
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
   <!-- Brand Logo -->
@@ -41,25 +39,14 @@ $currentPage = $_GET['page'] ?? '';
   <div class="sidebar">
     <!-- Sidebar user panel (optional) -->
     <div class="user-panel mt-3 pb-3 mb-3 d-flex">
-      <div class="image">
+      <div class="image d-flex align-items-center justify-content-center pl-3">
+        <i class="fa-solid fa-circle-user fa-xl" style="color: #f6f9fe;"></i>
       </div>
       <div class="info">
-
-        <a href="#" class="d-block">Welcome, <?php echo $_SESSION['username']; ?>!</a>
+        <a href="" class="d-block"> <?php echo $_SESSION['username']; ?></a>
       </div>
     </div>
 
-    <!-- SidebarSearch Form -->
-    <div class="form-inline">
-      <div class="input-group" data-widget="sidebar-search">
-        <input class="form-control form-control-sidebar" type="search" placeholder="Search" aria-label="Search">
-        <div class="input-group-append">
-          <button class="btn btn-sidebar">
-            <i class="fas fa-search fa-fw"></i>
-          </button>
-        </div>
-      </div>
-    </div>
 
     <!-- Sidebar Menu --> 
     <nav class="mt-2">
@@ -124,6 +111,14 @@ if (mysqli_num_rows($res) > 0) {
             <p>
               Mailbox
             </p>
+                                  <?php
+                      $id_user = $_SESSION['id_user'];
+                      $q_read = mysqli_query($conn, "SELECT COUNT(*) AS total_read FROM notification WHERE id_user = '$id_user' AND is_read = 0");
+                      $data_read = mysqli_fetch_assoc($q_read);
+                      $total_read = $data_read['total_read'];
+                      if ($total_read > 0): ?>
+                        <span id="badge-read-count" class="badge bg-primary float-right"><?= $total_read ?></span>
+                      <?php endif; ?>
           </a>
         </li>
       </ul>
