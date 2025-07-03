@@ -28,6 +28,7 @@ $isAdmin = isset($dataRole['role']) && $dataRole['role'] === 'admin';
 
   <div class="mb-4">
     <label for="taskTitle" class="form-label">Title</label>
+    <input type="hidden" name="status" value="<?= $isAdmin ? 'progress' : 'request' ?>">
     <input type="text" class="form-control" id="taskTitle" name="taskTitle"
       placeholder="Enter task title" required autocomplete="off" />
     <div id="titleHelp" class="form-text">Provide a short title for the task.</div>

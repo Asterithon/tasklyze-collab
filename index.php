@@ -88,6 +88,7 @@ session_start();
         } else {
           include 'style/template/dashboard.php';
         }
+        include 'style/template/footer.php';
       } else {
         include 'landing_page.php';}
     ?>
@@ -97,7 +98,6 @@ session_start();
 
   <!-- Footer -->
   <?php
-  include 'style/template/footer.php';
   ?>
 
   <!-- jQuery -->
