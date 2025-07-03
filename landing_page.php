@@ -31,7 +31,7 @@
   <!-- Navbar -->
   <header class="bg-white shadow-md">
     <div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
-    <img src="asset/img/logo_2.webp" alt="logo" class="h-14 md:h-20" loading="lazy">
+    <img src="asset/img/logo_2.webp" alt="logo" class="mr-6 md:mr-0 h-10 md:h-20" loading="lazy">
       <nav>
         <ul class="flex space-x-6 text-sm mb-0 items-center font-medium text-gray-700">
           <li><a href="#features" class="hover:text-blue-600 transition">Fitur</a></li>
