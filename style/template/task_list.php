@@ -86,7 +86,8 @@ AND NOT EXISTS (
     break;
 
   default:
-    $sql = "SELECT * FROM task WHERE id_project = $f_id_project";
+    $sql = "SELECT * FROM task WHERE id_project = $f_id_project & status_task != 'request' 
+            ORDER BY created_at DESC";
     break;
 }
 
