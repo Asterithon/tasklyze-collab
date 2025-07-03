@@ -44,16 +44,20 @@
 
     $progress_data = [];
     $tasks = mysqli_query($conn, "
-      SELECT t.name_task, rt.status
+      SELECT t.id_task, t.name_task, rt.status, p.name_project, p.id_project
       FROM r_user_task rt
       JOIN task t ON rt.id_task = t.id_task
+      JOIN project p ON t.id_project = p.id_project
       WHERE rt.id_user = $uid
     ");
 
     while ($row = mysqli_fetch_assoc($tasks)) {
       $progress_data[] = [
+        'id_task' => $row['id_task'],
         'name' => $row['name_task'],
-        'status' => $row['status']
+        'status' => $row['status'],
+        'project' => $row['name_project'],
+        'id_project' => $row['id_project']
       ];
     }
     ?>
@@ -101,44 +105,33 @@
     </div>
 
     <div class="row">
-      <!-- Daftar Proyek -->
-      <div class="col-md-5 mb-4">
+      <!-- Gabungan Proyek dan Progress Tugas -->
+      <div class="col-md-12 mb-4">
         <div class="card shadow-sm">
           <div class="card-header bg-primary text-white">
-            <h5 class="mb-0">Daftar Proyek</h5>
-          </div>
-          <ul class="list-group list-group-flush">
-            <?php if (mysqli_num_rows($projects) > 0): ?>
-              <?php while ($p = mysqli_fetch_assoc($projects)): ?>
-                <li class="list-group-item"><?= htmlspecialchars($p['name_project']) ?></li>
-              <?php endwhile; ?>
-            <?php else: ?>
-              <li class="list-group-item text-muted">Belum ada proyek.</li>
-            <?php endif; ?>
-          </ul>
-        </div>
-      </div>
-
-      <!-- Progress Tugas -->
-      <div class="col-md-7 mb-4">
-        <div class="card shadow-sm">
-          <div class="card-header bg-success text-white">
-            <h5 class="mb-0">Progress Tugas</h5>
+            <h5 class="mb-0">Daftar Proyek dan Progress Tugas</h5>
           </div>
           <div class="card-body">
             <?php if (!empty($progress_data)): ?>
-              <?php foreach ($progress_data as $p): ?>
-                <p class="mb-1"><?= htmlspecialchars($p['name']) ?></p>
-                <div class="alert alert-<?= $p['status'] === 'done' ? 'success' : 'warning' ?>" role="alert">
-                  Status: <?= htmlspecialchars($p['status']) ?>
-                </div>
-              <?php endforeach; ?>
+              <ul class="list-group list-group-flush">
+                <?php foreach ($progress_data as $p): ?>
+                  <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <div>
+                      <strong><?= htmlspecialchars($p['project']) ?>:</strong> <?= htmlspecialchars($p['name']) ?><br>
+                      <span class="badge badge-<?= $p['status'] === 'done' ? 'success' : 'warning' ?>">Status: <?= htmlspecialchars($p['status']) ?></span>
+                    </div>
+                  </li>
+                <?php endforeach; ?>
+              </ul>
             <?php else: ?>
-              <p class="text-muted">Belum ada tugas yang tercatat.</p>
+              <p class="text-muted">Belum ada proyek atau tugas yang tercatat.</p>
             <?php endif; ?>
           </div>
         </div>
       </div>
+
+
+
     </div>
   </section>
 </div>
